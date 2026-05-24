@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM 完全活用ガイド - 認定教育者試験対策</title>
+    <meta name="description" content="先生のためのNotebookLM完全活用ガイド。Geminiとの違い、PDF資料のアップロード、引用検証、Studio音声生成機能の解説。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    <div class="mesh-bg"></div>
+
+    <header class="glass-header">
+        <div class="header-container">
+            <h1 class="logo">
+                <span class="material-symbols-outlined logo-icon">auto_awesome</span>
+                NotebookLM Guide
+            </h1>
+            <nav>
+                <a href="./index.html" class="nav-link">ホーム (試験対策)</a>
+                <a href="./handson.html" class="nav-link">Geminiハンズオン</a>
+                <a href="#about-lm" class="nav-link">NotebookLMとは</a>
+                <a href="#handson-lm" class="nav-link">7ステップ操作デモ</a>
+                <button id="theme-toggle" class="theme-btn" aria-label="テーマ切り替え">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <div class="badge">Google 認定資格試験 必須範囲</div>
+                <h1 class="hero-title">自分専用の学習パートナー<br><span class="text-gradient">NotebookLM 完全ガイド</span></h1>
+                <p class="hero-subtitle">
+                    文科省のガイドラインや指導要領など、手持ちの資料を読み込ませるだけで、AIがその「資料の専門家」になる革新的なツール。試験のハンズオン操作項目（7ステップ）に対応した動くデモでわかりやすく解説します。
+                </p>
+                <div class="hero-buttons">
+                    <a href="#handson-lm" class="btn btn-primary">7ステップ操作デモを見る <span class="material-symbols-outlined">play_circle</span></a>
+                    <a href="./index.html" class="btn btn-secondary">試験対策ホームに戻る <span class="material-symbols-outlined">arrow_back</span></a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1" style="border-left-color: var(--primary-color);">
+                    <span class="material-symbols-outlined" style="color:var(--primary-color);">find_in_page</span>
+                    <p>引用元PDFへ一発ジャンプ</p>
+                </div>
+                <div class="floating-card card-2" style="border-left-color: var(--green-color);">
+                    <span class="material-symbols-outlined" style="color:var(--green-color);">mic</span>
+                    <p>AIによる掛け合い音声解説</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: NotebookLMとは -->
+        <section id="about-lm" class="section-padding">
+            <div class="container">
+                <h2 class="section-title">NotebookLM とは？ Geminiとの違い</h2>
+                <p class="section-desc">Googleの高度な言語モデルを使用しつつ、Geminiとは異なる「特定の資料に特化した」革新的なAIコラボレーターです。</p>
+
+                <div class="glass-card" style="margin-bottom:3rem; border-left: 6px solid var(--primary-color);">
+                    <h3>最大の特徴：ハルシネーション（嘘）の極小化 ＆ 参照元への連携</h3>
+                    <p>通常の生成AIはインターネット全体の曖昧な知識から回答するため、時に誤った情報（ハルシネーション）を出力します。<br>
+                    しかし、<strong>NotebookLMは「ユーザーがアップロードした資料だけ」</strong>をベースに回答するため、極めて正確性が高く、教育現場で安心して使えます。さらに、回答の根拠となった箇所（引用元）をワンクリックで瞬時に特定・検証できるのが最大の違いです。</p>
+                </div>
+
+                <div class="lm-grid">
+                    <div class="glass-card" style="border-top: 4px solid var(--yellow-color);">
+                        <h3>主な教育活用シーン</h3>
+                        <ul class="styled-list">
+                            <li><strong>指導要領やガイドラインの解読:</strong> 文科省の膨大なPDF資料をアップロードし、「教員の役割に関する注意点は？」等と質問して素早く読み取る。</li>
+                            <li><strong>教材・資料研究の効率化:</strong> 授業で使用する資料や論文をまとめてノートブックにし、背景知識を効率的にインプットする。</li>
+                            <li><strong>音声での授業準備:</strong> Studioのポッドキャスト機能で、資料の掛け合い解説音声を車通勤時などに聞いて理解を深める。</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card" style="border-top: 4px solid var(--green-color);">
+                        <h3>試験に出る！NotebookLMのセキュリティ</h3>
+                        <p>通常のGeminiと同様に、Google Workspace for Educationの学校アカウントで利用する場合、<strong>アップロードしたPDFやドキュメントなどのデータ、およびプロンプトがAIの再学習に使用されることは一切ありません。</strong></p>
+                        <div class="prompt-box" style="margin-top:20px;">
+                            <span class="material-symbols-outlined" style="color:var(--primary-color);">shield</span>
+                            <p style="font-size:0.85rem; color:var(--text-main); margin:0;">学校のデータを所有・管理するのは学校であり、外部へのデータ漏洩や広告利用は一切遮断されているため、安心して著作権物や生徒指導の参考資料をアップロードできます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: NotebookLM ハンズオン 7大機能 -->
+        <section id="handson-lm" class="section-padding theory-section">
+            <div class="container">
+                <h2 class="section-title">NotebookLM 実践ハンズオン 7ステップ</h2>
+                <p class="section-desc">認定教育者試験のハンズオン操作項目に対応した7つのステップです。実際の動きを模した自動モック画面とともに体験しましょう。</p>
+
+                <div class="timeline">
+                    <!-- Step 1 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">NotebookLMへのアクセス</h3>
+                                <p><strong>notebooklm.google.com</strong> にアクセスし、Googleアカウントでログインします。ログイン後、[新しいノートブック]をクリックして、学習や研究を行いたいテーマの作業環境（ノートブック）を作成します。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                        <div class="browser-url">notebooklm.google.com</div>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=1" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">ソースのアップロード</h3>
+                                <p>ノートブックにソース（学習・参照元の資料）を追加します。Googleドライブ内のドキュメントやスライド、ローカルのPDFのアップロード、特定のウェブサイトのURLの指定、またはコピーしたテキストを直接貼り付けることも可能です。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=2" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">ソースの検索機能</h3>
+                                <p>アップロードした複数の資料に対して、チャット欄から横断的に検索・質問することができます。複数のPDFや資料がある場合でも、AIがソース全体を一度に調べ上げ、関連する情報を統合して整理してくれます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=3" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">プロンプトの入力</h3>
+                                <p>「PARTSプロンプト」の型（役割・目的・対象・トーン・出力形式）を意識して、ソースに基づいた質問を入力します。例えば、「このガイドラインを元に、同僚教員向けに安全なAI活用例を箇条書きで提案して」といった具体的な指示をします。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=4" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">5</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">文中の引用・検証サポート</h3>
+                                <p>AIの回答内に<strong>「数字の引用元タグ」</strong>が表示されます。これをクリックすると、<strong>左側のPDFやドキュメントの該当ページが自動で開き、ソース内の具体的な根拠記述箇所を黄色くハイライト</strong>します。ファクトチェック（AAAのAccurate）が簡単に行えます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=5" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">6</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">Studio機能（対話音声生成）</h3>
+                                <p>右上の「Studio（または音声生成）」をクリックすると、アップロードした資料を元に、<strong>男性と女性の2人のAIナビゲーターによる対話形式の解説音声ポッドキャスト</strong>を自動生成します。難しい指導要領なども、楽しく会話感覚で耳からインプットできます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=6" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 7 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">7</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">生成物のカスタマイズ</h3>
+                                <p>AIの回答や生成された解説メモから、授業用のスライド構成案、シミュレーション、ワークシート等の形式にドキュメントを自由にカスタマイズ・編集して「メモ」に保存したり、外部へダウンロード・エクスポートすることが可能です。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_notebooklm.html?step=7" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section-padding">
+            <div class="container text-center">
+                <h2 style="font-size:2.2rem; font-weight:800; margin-bottom:1.5rem;">NotebookLMの学習は完了しました！</h2>
+                <p style="color:var(--text-muted); margin-bottom:2.5rem; max-width:700px; margin-left:auto; margin-right:auto;">
+                    次はGeminiの基本ハンズオンに移動するか、資格対策の主要理論（PARTS, AAAなど）を復習しましょう。
+                </p>
+                <div class="hero-buttons" style="justify-content:center;">
+                    <a href="./handson.html" class="btn btn-primary">Geminiハンズオンへ行く <span class="material-symbols-outlined">forward</span></a>
+                    <a href="./index.html" class="btn btn-secondary">試験対策ホームに戻る <span class="material-symbols-outlined">arrow_back</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="container">
+            <p>&copy; 2026 Gemini / NotebookLM 認定試験対策ポータル. Developed by Katsuse Shunta (Google for Education Champion).</p>
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>

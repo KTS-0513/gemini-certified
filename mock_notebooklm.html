@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>NotebookLM Mock Demo</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        :root {
+            --primary: #1a73e8;    /* Google Blue */
+            --red: #ea4335;        /* Google Red */
+            --yellow: #f9ab00;     /* Google Yellow */
+            --green: #34a853;      /* Google Green */
+            
+            --bg: #f8f9fa;
+            --panel-bg: #ffffff;
+            --border: #dadce0;
+            --text: #202124;
+            --text-muted: #5f6368;
+            --accent-light: #e8f0fe;
+            --pdf-highlight: rgba(249, 171, 0, 0.25);
+        }
+        [data-theme="dark"] {
+            --bg: #202124;
+            --panel-bg: #2d2d30;
+            --border: #3c4043;
+            --text: #f1f3f4;
+            --text-muted: #bdc1c6;
+            --accent-light: rgba(26, 115, 232, 0.15);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 0.82rem;
+            transition: all 0.3s;
+        }
+
+        /* Left: Source Panel */
+        .source-panel {
+            width: 220px;
+            background: var(--panel-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+        .panel-title {
+            font-weight: 800;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+        }
+        .add-source-btn {
+            border: 1px dashed var(--primary);
+            background: var(--accent-light);
+            color: var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 0.78rem;
+        }
+        .source-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        .source-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            animation: fadeIn 0.3s ease;
+        }
+        .source-item span { font-size: 14px; color: var(--primary); }
+
+        /* Middle: Document Viewer (PDF mock) */
+        .doc-viewer {
+            flex: 1;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: var(--panel-bg);
+        }
+        .doc-header {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            font-weight: 600;
+            font-size: 0.78rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .doc-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            line-height: 1.5;
+            font-size: 0.78rem;
+        }
+        .highlight {
+            background: var(--pdf-highlight);
+            border-radius: 2px;
+            padding: 2px 0;
+            border: 1px dashed var(--yellow-color);
+            transition: all 0.3s ease;
+        }
+
+        /* Right: Chat & Interaction Panel */
+        .chat-panel {
+            width: 320px;
+            background: var(--panel-bg);
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg);
+        }
+        .studio-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .chat-area {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .bubble {
+            display: flex;
+            gap: 8px;
+            max-width: 92%;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .bubble.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .bubble-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.72rem;
+            flex-shrink: 0;
+        }
+        .bubble.user .bubble-avatar { background: var(--primary); color: white; }
+        .bubble.ai .bubble-avatar { background: var(--green); color: white; }
+        .bubble-content {
+            background: var(--bg);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            border: 1px solid var(--border);
+        }
+        .cite-tag {
+            background: var(--yellow);
+            color: #000;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 4px;
+            border: 1px solid var(--yellow);
+        }
+
+        /* Input area */
+        .input-area {
+            padding: 8px 12px 12px;
+        }
+        .input-box {
+            background: var(--bg);
+            border-radius: 18px;
+            padding: 2px 10px;
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border);
+        }
+        .input-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 0.78rem;
+            outline: none;
+            padding: 6px 0;
+        }
+
+        /* Audio Player for Studio */
+        .audio-player {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeIn 0.4s ease;
+        }
+        .play-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: var(--green);
+        }
+
+        /* Customize Notes Mockup */
+        .custom-note {
+            background: #fff8e1;
+            border: 1px solid #ffe082;
+            color: #5d4037;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        [data-theme="dark"] .custom-note {
+            background: #3e2723;
+            border: 1px solid #5d4037;
+            color: #d7ccc8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--text);
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <!-- Left Source Panel -->
+    <div class="source-panel">
+        <div class="panel-title">
+            <span class="material-symbols-outlined">library_books</span>ソース
+        </div>
+        <div class="add-source-btn" id="add-source-btn">
+            <span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle; margin-right:4px;">add</span>ソースを追加
+        </div>
+        <div class="source-list" id="source-list">
+            <!-- Dynamically added -->
+        </div>
+    </div>
+
+    <!-- Middle Document Viewer -->
+    <div class="doc-viewer">
+        <div class="doc-header">
+            <span id="doc-title">選択中のソース: なし</span>
+            <span class="material-symbols-outlined" style="font-size: 14px; color: var(--text-muted);">open_in_full</span>
+        </div>
+        <div class="doc-content" id="doc-content">
+            <div style="text-align: center; color: var(--text-muted); margin-top: 60px;">
+                <span class="material-symbols-outlined" style="font-size: 30px; margin-bottom: 8px;">find_in_page</span>
+                <p>ソースを追加して表示します。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Chat Panel -->
+    <div class="chat-panel">
+        <div class="chat-header">
+            <span style="font-weight: 800; display:flex; align-items:center; gap:4px;">
+                <span class="material-symbols-outlined" style="color:var(--primary); font-size: 18px;">chat_bubble</span>チャット
+            </span>
+            <button class="studio-btn" id="studio-btn" style="display:none;">
+                <span class="material-symbols-outlined" style="font-size:12px;">music_note</span>Studioを開く
+            </button>
+        </div>
+
+        <div class="chat-area" id="chat-area">
+            <!-- Messages -->
+        </div>
+
+        <div class="input-area">
+            <div class="input-box">
+                <input type="text" id="chat-input" placeholder="このノートブックについて質問する..." readonly>
+                <span class="material-symbols-outlined" style="color: var(--text-muted); font-size: 16px;">send</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const step = parseInt(urlParams.get('step')) || 1;
+        const sourceList = document.getElementById('source-list');
+        const addSourceBtn = document.getElementById('add-source-btn');
+        const docTitle = document.getElementById('doc-title');
+        const docContent = document.getElementById('doc-content');
+        const chatArea = document.getElementById('chat-area');
+        const chatInput = document.getElementById('chat-input');
+        const studioBtn = document.getElementById('studio-btn');
+
+        // Dark mode synchronization
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        
+        // Simulated typing
+        function typeText(element, text, speed = 35, callback) {
+            let i = 0;
+            element.value = '';
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            element.parentNode.insertBefore(cursor, element.nextSibling);
+
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    element.value += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                    cursor.remove();
+                    if(callback) callback();
+                }
+            }, speed);
+        }
+
+        // Add bubble
+        function addBubble(sender, text, callback) {
+            const bubble = document.createElement('div');
+            bubble.className = `bubble ${sender}`;
+            bubble.innerHTML = `
+                <div class="bubble-avatar">${sender === 'user' ? 'U' : 'N'}</div>
+                <div class="bubble-content">${text}</div>
+            `;
+            chatArea.appendChild(bubble);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            if(callback) callback();
+        }
+
+        function triggerRestart(delay = 4500) {
+            setTimeout(() => { location.reload(); }, delay);
+        }
+
+        window.onload = () => {
+            if (step === 1) {
+                // Step 1: Access
+                chatArea.innerHTML = `
+                    <div style="text-align: center; margin-top: 50px;">
+                        <span class="material-symbols-outlined" style="font-size: 40px; color: var(--primary); animation: pulse 2s infinite;">login</span>
+                        <h4 style="margin-top:8px;">NotebookLMへアクセス</h4>
+                        <p style="color: var(--text-muted); margin-top: 4px; font-size:0.75rem;">新規ノートブックを作成します。</p>
+                        <button style="background: var(--primary); color:white; border:none; padding: 6px 12px; border-radius: 20px; font-weight:600; margin-top: 10px; cursor: pointer; font-size:0.75rem;" id="access-btn">ノートブックを作成</button>
+                    </div>
+                `;
+                setTimeout(() => {
+                    const btn = document.getElementById('access-btn');
+                    btn.innerText = "作成中...";
+                    setTimeout(() => {
+                        chatArea.innerHTML = `<div style="text-align:center; margin-top:50px; color:var(--text-muted);">ノートブック「理科の指導案」を作成しました！</div>`;
+                        triggerRestart(1500);
+                    }, 800);
+                }, 2000);
+            }
+            else if (step === 2) {
+                // Step 2: Uploading Source
+                setTimeout(() => {
+                    addSourceBtn.innerText = "アップロード中...";
+                    setTimeout(() => {
+                        sourceList.innerHTML = `
+                            <div class="source-item">
+                                <span class="material-symbols-outlined">picture_as_pdf</span>文科省_生成AIガイドライン.pdf
+                            </div>
+                        `;
+                        addSourceBtn.innerText = "+ ソースを追加";
+                        docTitle.innerText = "文科省_生成AIガイドライン.pdf";
+                        docContent.innerHTML = `
+                            <h4>「初等中等教育における生成AIガイドライン」</h4>
+                            <p style="margin-top:10px;">生成AIの適切な活用により、生徒の情報活用能力を育成する。導入フェーズにおいては教員の積極的な実践検証とリテラシー指導が不可欠である。</p>
+                        `;
+                        triggerRestart(3500);
+                    }, 1200);
+                }, 1000);
+            }
+            else if (step === 3) {
+                // Step 3: Source Search Function
+                sourceList.innerHTML = `
+                    <div class="source-item"><span class="material-symbols-outlined">picture_as_pdf</span>ガイドライン.pdf</div>
+                    <div class="source-item"><span class="material-symbols-outlined">description</span>理科授業案.docx</div>
+                `;
+                docTitle.innerText = "全ソースの検索";
+                docContent.innerHTML = `
+                    <p style="color:var(--text-muted);">全2個のアップロードソースから横断検索を実行します。</p>
+                `;
+                setTimeout(() => {
+                    typeText(chatInput, "すべての資料から「探究学習」に関する記述を検索して", 40, () => {
+                        setTimeout(() => {
+                            addBubble('user', chatInput.value);
+                            chatInput.value = '';
+                            setTimeout(() => {
+                                addBubble('ai', "検索結果：<b>『理科授業案.docx』</b>の第3セクション、および<b>『ガイドライン.pdf』</b>のP.4に、探究活動と生成AIの組み合わせ事例が記述されています。");
+                                triggerRestart(4500);
+                            }, 1000);
+                        }, 800);
+                    });
+                }, 1000);
+            }
+            else if (step === 4) {
+                // Step 4: Prompt Input
+                sourceList.innerHTML = `
+                    <div class="source-item"><span class="material-symbols-outlined">picture_as_pdf</span>ガイドライン.pdf</div>
+                `;
+                docTitle.innerText = "ガイドライン.pdf";
+                docContent.innerHTML = `
+                    <h4>教員の生成AI活用ガイドライン</h4>
+                    <p>教員の負担軽減、および授業の質向上のために安全な環境で生成AIを活用すべきである。</p>
+                `;
+                setTimeout(() => {
+                    typeText(chatInput, "PARTSプロンプト: [ペルソナ]あなたは中学校教員 [目的]ガイドラインを元に校務のAI活用例を提案 [対象]同僚教師 [形式]箇条書き", 30, () => {
+                        setTimeout(() => {
+                            addBubble('user', "PARTSプロンプトに沿って、校務での安全なAI活用例を提案して");
+                            chatInput.value = '';
+                            setTimeout(() => {
+                                addBubble('ai', "ガイドラインに基づいた、教員向けの安全な校務活用例（箇条書き）です：<br>1. 授業でのクイズ作成（Imagen等を用いたイラスト素材作成）<br>2. 保護者だよりの文章構成案のブラッシュアップ（コピペせず検証すること）<br>3. 複雑な会議資料の要約作成");
+                                triggerRestart(6000);
+                            }, 1000);
+                        }, 800);
+                    });
+                }, 1000);
+            }
+            else if (step === 5) {
+                // Step 5: Citation & Verification
+                sourceList.innerHTML = `
+                    <div class="source-item"><span class="material-symbols-outlined">picture_as_pdf</span>ガイドライン.pdf</div>
+                `;
+                docTitle.innerText = "ガイドライン.pdf";
+                docContent.innerHTML = `
+                    <h4>教員の生成AI活用</h4>
+                    <p style="margin-top:10px;">校務でのAI活用は推奨されるが、<span id="highlight-target">教員はAIの出力を盲信せず、ファクトチェックを行うべき</span>である。</p>
+                `;
+                addBubble('user', "教員のAI活用の注意点は？");
+                setTimeout(() => {
+                    addBubble('ai', `AIは便利ですが、<b>「出力を盲信せず教師自身がファクトチェックを行うこと」</b>が必須であると記されています。<span class="cite-tag" id="cite-1">1</span>`, () => {
+                        setTimeout(() => {
+                            const cite = document.getElementById('cite-1');
+                            cite.style.background = 'var(--yellow)';
+                            cite.style.color = '#000';
+                            const target = document.getElementById('highlight-target');
+                            target.className = 'highlight';
+                            docContent.scrollTop = target.offsetTop - 30;
+                            triggerRestart(5000);
+                        }, 1200);
+                    });
+                }, 1000);
+            }
+            else if (step === 6) {
+                // Step 6: Studio Function
+                sourceList.innerHTML = `
+                    <div class="source-item"><span class="material-symbols-outlined">picture_as_pdf</span>ガイドライン.pdf</div>
+                `;
+                docTitle.innerText = "Studio 音声解説";
+                docContent.innerHTML = `<p>ソースからAI音声ナビゲーターが対話形式で要約を生成します。</p>`;
+                studioBtn.style.display = 'block';
+                setTimeout(() => {
+                    studioBtn.innerText = "対話音声を生成中...";
+                    studioBtn.style.background = '#444';
+                    setTimeout(() => {
+                        studioBtn.style.display = 'none';
+                        const player = document.createElement('div');
+                        player.className = 'audio-player';
+                        player.innerHTML = `
+                            <button class="play-btn"><span class="material-symbols-outlined" style="font-size:14px; color:white;">play_arrow</span></button>
+                            <div style="flex:1;">
+                                <div style="font-weight:600; font-size:0.7rem; color:var(--text);">AI対話解説（掛け合いポッドキャスト）</div>
+                                <div style="width:100%; height:3px; background:#ccc; border-radius:2px; margin-top:4px; position:relative;">
+                                    <div style="width:40%; height:100%; background:var(--green); position:absolute; left:0; top:0;"></div>
+                                </div>
+                            </div>
+                            <span style="font-size:0.65rem; color:var(--text-muted);">03:10 / 10:00</span>
+                        `;
+                        chatArea.appendChild(player);
+                        triggerRestart(6000);
+                    }, 1800);
+                }, 1000);
+            }
+            else if (step === 7) {
+                // Step 7: Customize Output (Memo editor)
+                sourceList.innerHTML = `
+                    <div class="source-item"><span class="material-symbols-outlined">picture_as_pdf</span>ガイドライン.pdf</div>
+                `;
+                docTitle.innerText = "生成メモのカスタマイズ";
+                docContent.innerHTML = `<p>AIの生成結果から、スライド用の構成案や授業アイデアをカスタマイズして「メモ」に保存します。</p>`;
+                
+                setTimeout(() => {
+                    addBubble('ai', "授業アイデア：植物の成長比較シミュレーションワークシート");
+                    setTimeout(() => {
+                        const note = document.createElement('div');
+                        note.className = 'custom-note';
+                        note.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:600; font-size:0.75rem;">
+                                <span>📌 保存された学習アイデアメモ</span>
+                                <span class="material-symbols-outlined" style="font-size:14px; cursor:pointer;">edit</span>
+                            </div>
+                            <p style="font-size:0.75rem; line-height:1.4;">【小学5年 理科】植物の発芽クイズスライド案をここにエクスポートし、スライドの枚数やテキスト表現をカスタマイズして、ダウンロードが可能です。</p>
+                        `;
+                        chatArea.appendChild(note);
+                        triggerRestart(6000);
+                    }, 1500);
+                }, 1000);
+            }
+        };
+    </script>
+</body>
+</html>

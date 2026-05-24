@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Gemini Mock Demo</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        :root {
+            --primary: #1a73e8;    /* Google Blue */
+            --red: #ea4335;        /* Google Red */
+            --yellow: #f9ab00;     /* Google Yellow */
+            --green: #34a853;      /* Google Green */
+            
+            --bg: #f0f4f9;         /* Google Light warm gray */
+            --sidebar: #ffffff;
+            --text: #202124;
+            --text-muted: #5f6368;
+            --input-bg: #ffffff;
+            --border: #dadce0;
+        }
+        [data-theme="dark"] {
+            --bg: #202124;
+            --sidebar: #2d2d30;
+            --text: #f1f3f4;
+            --text-muted: #bdc1c6;
+            --input-bg: #2d2d30;
+            --border: #3c4043;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 180px;
+            background: var(--sidebar);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-right: 1px solid var(--border);
+        }
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--primary), var(--red), var(--yellow), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: var(--bg);
+            color: var(--primary);
+        }
+        .nav-item span { font-size: 16px; }
+
+        /* Main Chat */
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .header {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: var(--sidebar);
+        }
+        .model-selector {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg);
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            font-size: 0.78rem;
+        }
+        .chat-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+        .bubble {
+            display: flex;
+            gap: 10px;
+            max-width: 90%;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .bubble.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .bubble-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            color: white;
+        }
+        .bubble.user .bubble-avatar { background: var(--primary); }
+        .bubble.ai .bubble-avatar {
+            background: linear-gradient(135deg, var(--primary), var(--red), var(--yellow), var(--green));
+        }
+        .bubble-content {
+            background: var(--sidebar);
+            padding: 8px 14px;
+            border-radius: 14px;
+            line-height: 1.5;
+            font-size: 0.8rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(60,64,67,0.05);
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 10px 15px 15px;
+            width: 100%;
+        }
+        .input-box {
+            background: var(--input-bg);
+            border-radius: 20px;
+            padding: 4px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(60,64,67,0.05);
+        }
+        .input-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 0.8rem;
+            outline: none;
+            padding: 6px 0;
+        }
+        .input-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+        }
+        .input-actions span {
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Elements for specific steps */
+        .toast {
+            position: absolute;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #323232;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { bottom: 50px; opacity: 0; }
+            to { bottom: 70px; opacity: 1; }
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--text);
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Dropdown mockup */
+        .dropdown-menu {
+            position: absolute;
+            top: 40px;
+            left: 15px;
+            background: var(--sidebar);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 4px 0;
+            width: 140px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 10;
+            font-size: 0.75rem;
+        }
+        .dropdown-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .dropdown-item:hover { background: var(--bg); }
+
+        /* Workspace chip */
+        .workspace-chip {
+            background: var(--primary-light);
+            border: 1px solid rgba(26, 115, 232, 0.2);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.72rem;
+            margin-bottom: 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <span class="material-symbols-outlined" style="font-size: 18px;">auto_awesome</span>
+            Gemini
+        </div>
+        <div style="flex: 1; display:flex; flex-direction:column; gap:4px;">
+            <div class="nav-item active" id="nav-chat"><span class="material-symbols-outlined">chat</span>新規チャット</div>
+            <div class="nav-item" id="nav-gem"><span class="material-symbols-outlined">deployed_code</span>Gemの管理</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-chat">
+        <div class="header">
+            <div style="position: relative;">
+                <div class="model-selector" id="model-select">
+                    <span id="current-model">Gemini 3.5 Flash</span>
+                    <span class="material-symbols-outlined" style="font-size: 14px;">arrow_drop_down</span>
+                </div>
+                <div class="dropdown-menu" id="model-dropdown">
+                    <div class="dropdown-item">Gemini 3.5 Flash</div>
+                    <div class="dropdown-item" style="color: var(--primary);">Gemini Omni <span class="material-symbols-outlined" style="font-size:12px;">star</span></div>
+                </div>
+            </div>
+            <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-muted);">account_circle</span>
+        </div>
+
+        <div class="chat-area" id="chat-area"></div>
+
+        <div class="input-area">
+            <div class="input-box" id="input-box-wrapper">
+                <input type="text" id="chat-input" placeholder="ここにプロンプトを入力..." readonly>
+                <div class="input-actions">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    <span class="material-symbols-outlined">mic</span>
+                    <button class="send-btn" id="send-btn">
+                        <span class="material-symbols-outlined" style="color: white; font-size:14px;">send</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast" id="toast">Googleドキュメントにエクスポートしました</div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const step = parseInt(urlParams.get('step')) || 1;
+        const chatArea = document.getElementById('chat-area');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const modelSelect = document.getElementById('model-select');
+        const currentModel = document.getElementById('current-model');
+        const modelDropdown = document.getElementById('model-dropdown');
+        const toast = document.getElementById('toast');
+
+        // Dark mode synchronization
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Simulated typing
+        function typeText(element, text, speed = 40, callback) {
+            let i = 0;
+            element.value = '';
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+            element.parentNode.insertBefore(cursor, element.nextSibling);
+
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    element.value += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
+                    cursor.remove();
+                    if(callback) callback();
+                }
+            }, speed);
+        }
+
+        // Add bubble
+        function addBubble(sender, text, callback) {
+            const bubble = document.createElement('div');
+            bubble.className = `bubble ${sender}`;
+            bubble.innerHTML = `
+                <div class="bubble-avatar">${sender === 'user' ? 'U' : 'G'}</div>
+                <div class="bubble-content">${text}</div>
+            `;
+            chatArea.appendChild(bubble);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            if(callback) callback();
+        }
+
+        // Restart function for looping
+        function triggerRestart(delay = 4500) {
+            setTimeout(() => {
+                location.reload();
+            }, delay);
+        }
+
+        window.onload = () => {
+            if (step === 1) {
+                // Step 1: Access
+                chatArea.innerHTML = `
+                    <div style="text-align: center; margin-top: 50px;">
+                        <span class="material-symbols-outlined" style="font-size: 40px; color: var(--primary); animation: pulse 2s infinite;">login</span>
+                        <h4 style="margin-top:8px;">Googleアカウントでログイン</h4>
+                        <p style="color: var(--text-muted); margin-top: 4px; font-size:0.75rem;">教育向けアカウントは安全データ保護対象です。</p>
+                        <button style="background: var(--primary); color:white; border:none; padding: 6px 12px; border-radius: 20px; font-weight:600; margin-top: 10px; cursor: pointer; font-size:0.75rem;" id="login-btn">ログインする</button>
+                    </div>
+                `;
+                setTimeout(() => {
+                    const btn = document.getElementById('login-btn');
+                    btn.innerText = "ログイン中...";
+                    setTimeout(() => {
+                        chatArea.innerHTML = `<div style="text-align:center; margin-top:50px; color:var(--text-muted);">データ保護対象の安全なGeminiにログインしました！</div>`;
+                        triggerRestart(1500);
+                    }, 800);
+                }, 2000);
+            } 
+            else if (step === 2) {
+                // Step 2: Prompt Input
+                setTimeout(() => {
+                    typeText(chatInput, "小学5年生向けの理科『植物の発芽』の導入で使える、面白いクイズを3つ作って", 35, () => {
+                        setTimeout(() => {
+                            sendBtn.style.background = 'var(--primary)';
+                            addBubble('user', chatInput.value);
+                            chatInput.value = '';
+                            setTimeout(() => {
+                                addBubble('ai', "植物の発芽に関する導入クイズですね！<br><br>1. 種が発芽するために、絶対に必要「ではない」ものは？（日光、水、空気）<br>2. 冷蔵庫の中に入れた種は発芽する？<br>3. 水に沈めっぱなしにした種はどうなる？");
+                                triggerRestart(5000);
+                            }, 1000);
+                        }, 800);
+                    });
+                }, 1000);
+            }
+            else if (step === 3) {
+                // Step 3: Model Switch
+                addBubble('user', "複雑な数学の指導案を作成して");
+                setTimeout(() => {
+                    modelSelect.style.borderColor = 'var(--primary)';
+                    modelDropdown.style.display = 'block';
+                    setTimeout(() => {
+                        currentModel.innerText = "Gemini Omni";
+                        currentModel.style.color = 'var(--primary)';
+                        modelDropdown.style.display = 'none';
+                        setTimeout(() => {
+                            addBubble('ai', "<b>[Gemini Omni 起動]</b> 複雑な指導案ですね。Imagen 3による説明図解やCanvasによる編集案も含めた、マルチモーダルな最適指導案を論理構築します。");
+                            triggerRestart(4000);
+                        }, 1000);
+                    }, 1500);
+                }, 1000);
+            }
+            else if (step === 4) {
+                // Step 4: Image Gen
+                setTimeout(() => {
+                    typeText(chatInput, "理科の実験でフラスコを持っている可愛い犬のイラストを生成して", 35, () => {
+                        setTimeout(() => {
+                            addBubble('user', chatInput.value);
+                            chatInput.value = '';
+                            setTimeout(() => {
+                                addBubble('ai', 'フラスコを持って実験をしている可愛い柴犬のイラストを生成しました！<br><div style="text-align:center;"><span class="material-symbols-outlined" style="font-size:50px; color:var(--primary); margin:5px 0;">pets</span><br><small style="color:var(--text-muted);">[Imagen 3 による生成画像]</small></div>');
+                                triggerRestart(5000);
+                            }, 1200);
+                        }, 800);
+                    });
+                }, 1000);
+            }
+            else if (step === 5) {
+                // Step 5: Guided Learning
+                addBubble('user', "二次方程式の解き方を教えて。答えを直接教えず、ヒントを順番に出して。");
+                setTimeout(() => {
+                    addBubble('ai', "素晴らしいですね！一緒に考えていきましょう。<br>式：<b>x² - 5x + 6 = 0</b><br><br>ヒント：かけて 6 になり、たして -5 になる2つの数字は何でしょうか？");
+                    triggerRestart(6000);
+                }, 1000);
+            }
+            else if (step === 6) {
+                // Step 6: Export
+                addBubble('ai', "【来週のお便り草案】<br>保護者の皆様へ<br>来週の木曜日に校外学習を予定しております。持ち物のご準備をお願いいたします...");
+                setTimeout(() => {
+                    const exportBtn = document.createElement('button');
+                    exportBtn.style = "background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: 12px; display:flex; align-items:center; gap:4px; margin-top:8px; cursor:pointer; font-size:0.72rem;";
+                    exportBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px; color:var(--primary);">share</span> ドキュメントにエクスポート';
+                    chatArea.appendChild(exportBtn);
+                    setTimeout(() => {
+                        exportBtn.style.background = 'var(--primary)';
+                        exportBtn.style.color = '#fff';
+                        toast.style.display = 'block';
+                        setTimeout(() => { 
+                            toast.style.display = 'none'; 
+                            triggerRestart(2000);
+                        }, 2000);
+                    }, 1500);
+                }, 1000);
+            }
+            else if (step === 7) {
+                // Step 7: Deep Research
+                chatArea.innerHTML = `
+                    <div style="background: var(--sidebar); border:1px solid var(--border); border-radius: 12px; padding: 15px; border-left: 4px solid var(--primary); margin-top: 20px;">
+                        <div style="display:flex; align-items:center; gap:8px; color: var(--primary); font-weight:bold; margin-bottom:8px; font-size:0.8rem;">
+                            <span class="material-symbols-outlined" style="font-size:16px;">biotech</span> Deep Research 実行中...
+                        </div>
+                        <p style="color: var(--text-muted); font-size:0.75rem;">探究活動における最新の実践事例（24のWebソース）を統合分析中...</p>
+                        <div style="width: 100%; height: 3px; background: var(--bg); border-radius:2px; margin-top:8px; overflow:hidden;">
+                            <div style="width: 70%; height: 100%; background: var(--primary); border-radius:2px; animation: progress 2.5s infinite ease-in-out;"></div>
+                        </div>
+                    </div>
+                `;
+                const style = document.createElement('style');
+                style.innerHTML = `@keyframes progress { 0% { transform: translateX(-100%); } 100% { transform: translateX(150%); } }`;
+                document.head.appendChild(style);
+                triggerRestart(5500);
+            }
+            else if (step === 8) {
+                // Step 8: Gem
+                document.getElementById('nav-gem').classList.add('active');
+                document.getElementById('nav-chat').classList.remove('active');
+                chatArea.innerHTML = `
+                    <div style="width: 100%; background: var(--sidebar); padding: 12px; border-radius: 12px; border: 1px solid var(--border); border-left: 4px solid var(--red);">
+                        <h4 style="margin-bottom: 8px; font-size:0.8rem; color:var(--primary);">新規 Gem の作成</h4>
+                        <label style="display:block; color:var(--text-muted); font-size:0.68rem; margin-bottom:2px;">Gemの名前</label>
+                        <input type="text" value="英語スピーキング相手" style="width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:5px; border-radius:6px; margin-bottom:8px; font-size:0.72rem;" readonly>
+                        <label style="display:block; color:var(--text-muted); font-size:0.68rem; margin-bottom:2px;">指示（プロンプト）</label>
+                        <textarea style="width:100%; height:50px; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:5px; border-radius:6px; font-size:0.72rem; resize:none; font-family:inherit;" readonly>あなたは中学校の英語の先生です。簡単な英語で対話し、表現の誤りがあれば優しく教えてください。</textarea>
+                    </div>
+                `;
+                triggerRestart(5000);
+            }
+            else if (step === 9) {
+                // Step 9: Workspace
+                setTimeout(() => {
+                    typeText(chatInput, "@Google ドライブ 来週の職員会議のレジュメ.pdf を要約して", 35, () => {
+                        const chip = document.createElement('div');
+                        chip.className = 'workspace-chip';
+                        chip.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px;">draft</span> レジュメ.pdf';
+                        const wrapper = document.getElementById('input-box-wrapper');
+                        wrapper.insertBefore(chip, chatInput);
+                        chatInput.value = "@Google ドライブ ... 要約して";
+                        setTimeout(() => {
+                            addBubble('user', "@Google ドライブ 『来週の職員会議のレジュメ.pdf』を要約して");
+                            chatInput.value = '';
+                            chip.remove();
+                            setTimeout(() => {
+                                addBubble('ai', "ドライブ内の<b>『来週の職員会議のレジュメ.pdf』</b>を確認しました。要約：<br>1. 議題：期末テストの日程調整<br>2. 決定事項：進捗報告書の提出締め切りは今週末まで。");
+                                triggerRestart(5500);
+                            }, 1200);
+                        }, 1000);
+                    });
+                }, 1000);
+            }
+        };
+    </script>
+</body>
+</html>

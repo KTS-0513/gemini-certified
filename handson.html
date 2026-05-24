@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini 実践ハンズオン完全ガイド - 認定教育者試験対策</title>
+    <meta name="description" content="先生のためのGeminiハンズオン完全ガイド。アクセス、プロンプト入力、モデル切替、Imagen画像生成、Learnガイド付き学習、Gem作成、ディープリサーチの解説。">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    <div class="mesh-bg"></div>
+
+    <header class="glass-header">
+        <div class="header-container">
+            <h1 class="logo">
+                <span class="material-symbols-outlined logo-icon">auto_awesome</span>
+                Gemini Hands-on
+            </h1>
+            <nav>
+                <a href="./index.html" class="nav-link">ホーム (試験対策)</a>
+                <a href="./notebooklm.html" class="nav-link">NotebookLMガイド</a>
+                <a href="#handson-steps" class="nav-link">9ステップ操作デモ</a>
+                <a href="#keywords" class="nav-link">重要キーワード</a>
+                <button id="theme-toggle" class="theme-btn" aria-label="テーマ切り替え">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <div class="badge">Google 認定資格試験 必須範囲</div>
+                <h1 class="hero-title">実際の動きを見てマスターする<br><span class="text-gradient">Gemini ハンズオンガイド</span></h1>
+                <p class="hero-subtitle">
+                    試験に出題されるGeminiの全機能を、実際の自動モックデモ画面を見ながら順を追って習得しましょう。先生方が授業や校務ですぐに使える具体的な活用法も豊富に掲載。
+                </p>
+                <div class="hero-buttons">
+                    <a href="#handson-steps" class="btn btn-primary">操作デモを見る <span class="material-symbols-outlined">play_circle</span></a>
+                    <a href="./index.html" class="btn btn-secondary">試験対策ホームに戻る <span class="material-symbols-outlined">arrow_back</span></a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card card-1" style="border-left-color: var(--primary-color);">
+                    <span class="material-symbols-outlined" style="color:var(--primary-color);">auto_awesome</span>
+                    <p>Gemini 3.5 Flash 超速応答</p>
+                </div>
+                <div class="floating-card card-2" style="border-left-color: var(--red-color);">
+                    <span class="material-symbols-outlined" style="color:var(--red-color);">psychology</span>
+                    <p>Gemini Omni 高度推論</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 1: Gemini ハンズオン 9ステップ -->
+        <section id="handson-steps" class="section-padding">
+            <div class="container">
+                <h2 class="section-title">Gemini 実践ハンズオン 9ステップ</h2>
+                <p class="section-desc">自動操作モックデモを見ながら、基本的な使い方から高度な応用機能までを順に体験しましょう。</p>
+
+                <div class="timeline">
+                    <!-- Step 1 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">Geminiへのアクセス</h3>
+                                <p>まずは <strong>gemini.google.com</strong> にアクセスし、Googleアカウントでログインします。<br>
+                                <strong>【試験対策ポイント】</strong><br>
+                                学校用の Google Workspace for Education アカウントでログインすることで、入力したデータが人間のレビュアーに確認されたり、AIの再学習に使用されたりしない「データ保護」が自動適用されます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                        <div class="browser-url">gemini.google.com</div>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=1" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">プロンプトの入力</h3>
+                                <p>入力欄に質問や指示（プロンプト）を入力します。「PARTSプロンプト」の型（役割・目的・対象・トーン・出力形式）を意識することが最も重要です。</p>
+                                <div class="prompt-box">
+                                    <span class="material-symbols-outlined">chat</span>
+                                    <code>「小学5年生向けの理科『植物の発芽』の導入で使える、面白いクイズを3つ作って」</code>
+                                </div>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=2" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">モデルの切り替え</h3>
+                                <p>画面上部のモデル切り替えから最適なモデルを選びます。<br>
+                                <strong>Gemini 3.5 Flash</strong> は大量の校務作業（議事録要約など）を瞬時に終わらせる高速性を持ち、<strong>Gemini Omni</strong> はグラフの分析や複雑な指導案作成などの論理推論に長けています。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=3" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">画像生成</h3>
+                                <p>Googleの最高水準の画像生成モデル <strong>Imagen 3</strong> が裏側で動作し、テキスト指示を与えるだけで、授業用プリントやスライド、学年だよりで使えるオリジナル画像を簡単に生成できます。</p>
+                                <div class="prompt-box">
+                                    <span class="material-symbols-outlined">image</span>
+                                    <code>「理科の実験でフラスコを持っている可愛い犬 of イラストを生成して」</code>
+                                </div>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=4" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">5</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">ガイド付き学習 (Learn)</h3>
+                                <p>答えを直接教えず、ヒントを小出しにして対話で学習を促す機能です。子どもたちが自分で考えて問題解決を行うための「AIチューター」として、探究学習や放課後学習をサポートします。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=5" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">6</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">[共有とエクスポート]ボタン</h3>
+                                <p>生成された回答の下部にある「共有とエクスポート」から、ワンクリックで <strong>Googleドキュメントに直接エクスポート</strong> したり、<strong>Gmailで下書きを作成</strong> することができます。教材の下書きをすぐに編集・印刷するのに非常に便利です。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=6" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 7 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">7</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">ディープリサーチ (Deep Research)</h3>
+                                <p>Web上の数十の専門ソースや論文を自律的にくまなく調査し、構成の整った複数ページのレポートを数分で自動作成します。授業の新しい教材研究や最新の教育実践の調査に役立ちます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=7" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 8 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">8</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">Gem の説明・活用法</h3>
+                                <p><strong>Gem</strong> は、特定の役割（例：英語の会話相手、お便りの下書き作成アシスタント）を持たせて固定した、自分専用のカスタムAIです。作成したGemは、同僚の先生や生徒へもリンク一つで共有できます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=8" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 9 -->
+                    <div class="timeline-item slide-in">
+                        <div class="timeline-number">9</div>
+                        <div class="timeline-content glass-card">
+                            <div class="step-text">
+                                <h3 class="step-title">Google Workspaceとの連携 (拡張機能)</h3>
+                                <p>拡張機能を有効にすると、Geminiのチャット内で「@Google ドライブ」や「@Gmail」と入力することで、普段自分が使っているGoogleのクラウド上のデータと連携できます。「ドライブ内のあの資料を3行で要約して」といった指示が安全に行えます。</p>
+                            </div>
+                            <div class="step-video">
+                                <div class="browser-mockup">
+                                    <div class="browser-header">
+                                        <span class="dot close"></span><span class="dot minimize"></span><span class="dot expand"></span>
+                                    </div>
+                                    <div class="video-wrapper">
+                                        <iframe src="./mock_gemini.html?step=9" style="width: 100%; height: 100%; border: none; overflow: hidden;" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: 重要キーワード解説（試験対策） -->
+        <section id="keywords" class="section-padding theory-section">
+            <div class="container">
+                <h2 class="section-title">試験直前！絶対に覚えておくべき重要追加キーワード</h2>
+                <p class="section-desc">Googleの最新生成AIプラットフォームにおいて、出題されやすい主要なテクノロジー名です。</p>
+
+                <div class="info-grid">
+                    <div class="info-card glass-card fade-in">
+                        <span class="material-symbols-outlined info-icon" style="color:var(--primary-color); background:var(--primary-light);">image</span>
+                        <h3>Imagen (画像生成モデル)</h3>
+                        <p>最新の <strong>Imagen 3</strong> がGeminiの裏側で動作しています。テキストプロンプト（指示文）から極めて高精細でアーティスティックなイラストや写真表現の画像を生成し、既存の画像の特定部分を編集・追加することも可能です。</p>
+                    </div>
+                    <div class="info-card glass-card fade-in" style="transition-delay: 100ms;">
+                        <span class="material-symbols-outlined info-icon" style="color:var(--red-color); background:rgba(234, 67, 53, 0.1);">movie</span>
+                        <h3>Veo (動画生成モデル)</h3>
+                        <p>Googleの最高峰動画生成AI <strong>Veo 3</strong> です。テキストから非常にリアルかつクリエイティブな1080p（フルHD）動画を自動生成し、授業の教材映像などを即座に創り出すことができます。</p>
+                    </div>
+                    <div class="info-card glass-card fade-in" style="transition-delay: 200ms;">
+                        <span class="material-symbols-outlined info-icon" style="color:var(--green-color); background:rgba(52, 168, 83, 0.1);">draw</span>
+                        <h3>Canvas (ドキュメント・アプリ作成)</h3>
+                        <p>文章作成やアイデア整理から、簡単なプログラミングや教育アプリ作成まで、直感的なドキュメント作業エリアでAIとリアルタイムで共同編集できる最新インタフェース機能です。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section-padding">
+            <div class="container text-center">
+                <h2 style="font-size:2.2rem; font-weight:800; margin-bottom:1.5rem;">Geminiの学習は完了しました！</h2>
+                <p style="color:var(--text-muted); margin-bottom:2.5rem; max-width:700px; margin-left:auto; margin-right:auto;">
+                    次はNotebookLMのガイドへ移動して引用検証やStudio機能を学ぶか、資格対策の主要理論（PARTS, AAAなど）を復習しましょう。
+                </p>
+                <div class="hero-buttons" style="justify-content:center;">
+                    <a href="./notebooklm.html" class="btn btn-primary">NotebookLMガイドへ行く <span class="material-symbols-outlined">forward</span></a>
+                    <a href="./index.html" class="btn btn-secondary">試験対策ホームに戻る <span class="material-symbols-outlined">arrow_back</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="container">
+            <p>&copy; 2026 Gemini / NotebookLM 認定試験対策ポータル. Developed by Katsuse Shunta (Google for Education Champion).</p>
+        </div>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
