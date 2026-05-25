@@ -51,136 +51,7 @@
             transition: all 0.3s;
         }
 
-        /* Left Sidebar - Gemini for Education Replica */
-        .sidebar {
-            width: 250px;
-            background: var(--sidebar-bg);
-            padding: 16px 12px;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid var(--border);
-            height: 100%;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            padding: 0 8px;
-        }
-
-        .logo {
-            font-size: 1.15rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text);
-        }
-
-        .logo-icon {
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, #1a73e8, #ea4335, #f9ab00, #34a853);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .toggle-sidebar-btn {
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.25rem;
-        }
-
-        /* Core actions */
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: 24px;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--text);
-            font-size: 0.82rem;
-            transition: background 0.2s;
-            margin-bottom: 4px;
-        }
-
-        .nav-item:hover {
-            background: var(--sidebar-hover);
-        }
-
-        .nav-item.active-chat-btn {
-            background: var(--sidebar-hover);
-            font-weight: 700;
-        }
-
-        .nav-item span {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-        }
-
-        /* Recent section (Exact replica of Education Dummy) */
-        .section-header {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin: 24px 0 8px 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .recent-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            flex: 1;
-        }
-
-        .list-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            color: var(--text);
-            font-size: 0.78rem;
-            transition: background 0.2s;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .list-item:hover {
-            background: var(--sidebar-hover);
-        }
-
-        .list-item-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .list-item-content span {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-
-        .list-item-text {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Main Workspace */
+        /* Main Workspace (Takes full width, no sidebar for complete privacy) */
         .main-chat {
             flex: 1;
             display: flex;
@@ -188,6 +59,7 @@
             background: radial-gradient(circle at 50% 30%, rgba(26,115,232,0.03), transparent 60%), var(--bg);
             height: 100%;
             position: relative;
+            width: 100vw;
         }
 
         .header-top {
@@ -365,7 +237,7 @@
             margin-left: 4px;
         }
 
-        /* Model Dropdown Menu */
+        /* Dropdowns */
         .model-dropdown {
             position: absolute;
             bottom: 58px;
@@ -382,7 +254,6 @@
             animation: popUp 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        /* Tool Dropdown Menu (Exact Replica from the Education Screenshot) */
         .tool-dropdown {
             position: absolute;
             bottom: 58px;
@@ -433,7 +304,6 @@
             margin: 6px 6px;
         }
 
-        /* Nested Secondary Tool Dropdown (Deep Research, Audio generation) */
         .sub-tool-dropdown {
             position: absolute;
             bottom: 0px;
@@ -520,6 +390,214 @@
             animation: slideUp 0.3s ease;
         }
 
+        /* Gem Creation Panel Styles (Replica of Screenshot) */
+        .gem-creation-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            padding: 16px 24px;
+            animation: fadeIn 0.4s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 500;
+        }
+
+        .gem-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+        }
+
+        .gem-title-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .gem-icon-badge {
+            background: var(--sidebar-bg);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .gem-icon-badge span {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--red), var(--yellow), var(--green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gem-save-btn {
+            background: #e0e0e0;
+            color: #888;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: not-allowed;
+            font-size: 0.82rem;
+            transition: all 0.3s;
+        }
+
+        .gem-save-btn.active {
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(26,115,232,0.25);
+        }
+
+        .gem-workspace-split {
+            display: flex;
+            flex: 1;
+            gap: 24px;
+            overflow: hidden;
+            height: calc(100vh - 100px);
+        }
+
+        .gem-edit-panel {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            background: var(--bg);
+        }
+
+        .gem-preview-panel {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: var(--bg);
+        }
+
+        .gem-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .gem-form-label {
+            font-size: 0.76rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .gem-input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.85rem;
+            transition: border-color 0.2s;
+        }
+
+        .gem-input-field:focus {
+            border-color: var(--primary);
+            border-width: 2px;
+        }
+
+        .gem-textarea-field {
+            width: 100%;
+            height: 70px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.85rem;
+            resize: none;
+            font-family: inherit;
+            line-height: 1.45;
+        }
+
+        .gem-custom-instruction-box {
+            position: relative;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            padding: 12px;
+        }
+
+        .gem-custom-textarea {
+            width: 100%;
+            height: 110px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text);
+            font-size: 0.85rem;
+            resize: none;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .gem-tool-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            border-top: 1px solid var(--border);
+            padding-top: 8px;
+            color: var(--text-muted);
+        }
+
+        .gem-tool-bar span {
+            font-size: 1.15rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .gem-tool-bar span:hover {
+            color: var(--text);
+        }
+
+        .gem-horizontal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .gem-file-upload-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px dashed var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .gem-file-upload-box:hover {
+            background: var(--sidebar-bg);
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -560,105 +638,7 @@
 </head>
 <body>
 
-    <!-- Left Sidebar: Gemini for Education Replica (No user details, generic chat names) -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <span class="material-symbols-outlined logo-icon">auto_awesome</span>
-                Gemini
-            </div>
-            <span class="material-symbols-outlined toggle-sidebar-btn">menu_open</span>
-        </div>
-
-        <div class="nav-item active-chat-btn">
-            <span class="material-symbols-outlined">chat_bubble</span>
-            チャットを新規作成
-        </div>
-        <div class="nav-item">
-            <span class="material-symbols-outlined">search</span>
-            チャットを検索
-        </div>
-        <div class="nav-item">
-            <span class="material-symbols-outlined">library_books</span>
-            ライブラリ
-        </div>
-        <div class="nav-item">
-            <span class="material-symbols-outlined">deployed_code</span>
-            Gem
-        </div>
-
-        <div class="section-header">最近</div>
-        <div class="recent-list">
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">画面右側の男性が着ているポロシャツを...</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">今日の振り返りと気持ちの共有</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">班活動の振り返りと雰囲気</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">理想の野菜デザインと育成計画</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">AIアシスタントで先生の業務を支援</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">こんにちはと返答</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">学校祭保護者向け案内文書作成</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">先生のためのプロンプト・パートナー</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">体育大会選手宣誓ネタ作成</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">AIアシスタントができること</div>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-item-content">
-                    <span class="material-symbols-outlined">chat</span>
-                    <div class="list-item-text">ディスカッション題材作成の共同作業</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Chat Workspace -->
+    <!-- Main Chat Workspace (Full Width, No Sidebar for absolute user privacy) -->
     <div class="main-chat">
         <div class="header-top">
             <span class="material-symbols-outlined pen-btn">edit</span>
@@ -672,7 +652,7 @@
         </div>
 
         <!-- Floating bottom container -->
-        <div class="bottom-container">
+        <div class="bottom-container" id="bottom-container">
             <div class="input-box-wrapper" id="input-wrapper">
                 <!-- Toggle menu when click add/cross button -->
                 <span class="material-symbols-outlined add-icon-btn" id="add-btn">add</span>
@@ -767,6 +747,79 @@
             </div>
         </div>
 
+        <!-- High-fidelity Gem Creation Workspace (Step 8 container) -->
+        <div class="gem-creation-container" id="gem-creation-workspace" style="display:none;">
+            <!-- Header -->
+            <div class="gem-header">
+                <div class="gem-title-area">
+                    <span class="material-symbols-outlined" style="cursor:pointer; color:var(--text-muted);" id="gem-back-btn">arrow_back</span>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div class="gem-icon-badge">
+                            <span class="material-symbols-outlined">deployed_code</span>
+                        </div>
+                        <span style="font-size:1.15rem; font-weight:500;" id="gem-header-title">新しい Gem</span>
+                    </div>
+                </div>
+                <button class="gem-save-btn" id="gem-save-button">保存</button>
+            </div>
+            
+            <!-- Workspace Content Split -->
+            <div class="gem-workspace-split">
+                <!-- Left: Edit Panel -->
+                <div class="gem-edit-panel">
+                    <div class="gem-form-group">
+                        <label class="gem-form-label">名前</label>
+                        <input type="text" id="gem-name-field" class="gem-input-field" placeholder="Gem に名前をつけてください" readonly style="border: 2px solid var(--primary);">
+                    </div>
+                    <div class="gem-form-group">
+                        <label class="gem-form-label">説明</label>
+                        <textarea id="gem-desc-field" class="gem-textarea-field" placeholder="この Gem で何をするかを入力してください" readonly></textarea>
+                    </div>
+                    <div class="gem-form-group">
+                        <label class="gem-form-label">カスタム指示 <span class="material-symbols-outlined" style="font-size:14px; color:var(--text-muted);">info</span></label>
+                        <div class="gem-custom-instruction-box">
+                            <textarea id="gem-instruction-field" class="gem-custom-textarea" placeholder="例: 天然芝と在来植物を専門とする園芸家として、水やり不要の庭づくりを支援する。地域や気候、地域固有の植物を考慮する..." readonly></textarea>
+                            <div class="gem-tool-bar">
+                                <span class="material-symbols-outlined">undo</span>
+                                <span class="material-symbols-outlined">redo</span>
+                                <span class="material-symbols-outlined">edit</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gem-horizontal-row">
+                        <span class="gem-form-label">デフォルト ツール <span class="material-symbols-outlined" style="font-size:14px; color:var(--text-muted);">info</span></span>
+                        <span style="color:var(--text-muted); font-size:0.8rem; display:flex; align-items:center; gap:4px; font-weight:500;">デフォルト ツールがありません <span class="material-symbols-outlined">expand_more</span></span>
+                    </div>
+                    <div class="gem-form-group" style="margin-top:4px;">
+                        <label class="gem-form-label">知識 <span class="material-symbols-outlined" style="font-size:14px; color:var(--text-muted);">info</span></label>
+                        <div class="gem-file-upload-box">
+                            <span style="font-size:0.8rem; font-weight:500;">Gem が参照するファイルを追加します</span>
+                            <span class="material-symbols-outlined">add</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right: Preview Panel -->
+                <div class="gem-preview-panel">
+                    <div style="font-size:0.85rem; font-weight:600; color:var(--text-muted); margin-bottom:16px;">プレビュー</div>
+                    <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-muted); text-align:center; padding-bottom:60px;" id="gem-preview-center">
+                        <span class="material-symbols-outlined" style="font-size:4rem; color:var(--border); margin-bottom:12px;" id="gem-preview-icon">deployed_code</span>
+                        <div style="font-size:0.9rem; font-weight:500;" id="gem-preview-text">Gem を確認するには、まず名前をつけてください</div>
+                    </div>
+                    
+                    <!-- Preview Box Input (disabled placeholder) -->
+                    <div class="input-box-wrapper" style="width:100%; opacity:0.5; cursor:not-allowed; background:var(--sidebar-bg);">
+                        <span class="material-symbols-outlined add-icon-btn">add</span>
+                        <input type="text" placeholder="Gemini に相談" disabled style="cursor:not-allowed;">
+                        <div class="model-selector-pill">
+                            <span>Pro</span>
+                            <span class="material-symbols-outlined" style="font-size: 14px;">arrow_drop_down</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="toast" id="toast">Google ドキュメントにエクスポートしました</div>
     </div>
 
@@ -784,6 +837,18 @@
         const subToolDropdown = document.getElementById('sub-tool-dropdown');
         const welcomeGreeting = document.getElementById('welcome-greeting');
         const toast = document.getElementById('toast');
+
+        // Gem UI Elements
+        const gemWorkspace = document.getElementById('gem-creation-workspace');
+        const bottomContainer = document.getElementById('bottom-container');
+        const gemNameField = document.getElementById('gem-name-field');
+        const gemDescField = document.getElementById('gem-desc-field');
+        const gemInstructionField = document.getElementById('gem-instruction-field');
+        const gemSaveButton = document.getElementById('gem-save-button');
+        const gemHeaderTitle = document.getElementById('gem-header-title');
+        const gemPreviewText = document.getElementById('gem-preview-text');
+        const gemPreviewIcon = document.getElementById('gem-preview-icon');
+        const gemPreviewCenter = document.getElementById('gem-preview-center');
 
         // Dark mode synchronization
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -844,6 +909,21 @@
                 } else {
                     clearInterval(timer);
                     cursor.remove();
+                    if(callback) callback();
+                }
+            }, speed);
+        }
+
+        // Simulated typing for textareas
+        function typeTextarea(element, text, speed = 25, callback) {
+            let i = 0;
+            element.value = '';
+            const timer = setInterval(() => {
+                if (i < text.length) {
+                    element.value += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(timer);
                     if(callback) callback();
                 }
             }, speed);
@@ -912,7 +992,7 @@
             else if (step === 3) {
                 // Step 3: Model Switch (Show open dropdown menu)
                 currentModel.innerText = "Flash";
-                addBubble('user', "数学の立体図形について、動画付きのアニメーション教材と解説を一緒に作って");
+                addBubble('user', "数学 of 立体図形について、動画付きのアニメーション教材と解説を一緒に作って");
                 setTimeout(() => {
                     modelSelect.style.borderColor = 'var(--primary)';
                     setTimeout(() => {
@@ -935,20 +1015,17 @@
                 }, 1000);
             }
             else if (step === 4) {
-                // Step 4: Image Gen (Show the add menu clicking & Imagen selection)
+                // Step 4: Image Gen
                 currentModel.innerText = "Flash";
                 setTimeout(() => {
-                    // Click '+' button to show tool menu
                     addBtn.innerText = 'close';
                     addBtn.style.transform = 'rotate(90deg)';
                     toolDropdown.style.display = 'block';
                     
                     setTimeout(() => {
-                        // Highlight '画像を作成'
                         document.getElementById('tool-image').style.background = 'var(--sidebar-hover)';
                         
                         setTimeout(() => {
-                            // Close menu and start typing
                             toolDropdown.style.display = 'none';
                             addBtn.innerText = 'add';
                             addBtn.style.transform = 'rotate(0deg)';
@@ -968,20 +1045,17 @@
                 }, 1000);
             }
             else if (step === 5) {
-                // Step 5: Guided Learning (Show the add menu and Guided learning selection)
+                // Step 5: Guided Learning
                 currentModel.innerText = "Flash";
                 setTimeout(() => {
-                    // Click '+' button
                     addBtn.innerText = 'close';
                     addBtn.style.transform = 'rotate(90deg)';
                     toolDropdown.style.display = 'block';
                     
                     setTimeout(() => {
-                        // Highlight 'ガイド付き学習'
                         document.getElementById('tool-guided').style.background = 'var(--sidebar-hover)';
                         
                         setTimeout(() => {
-                            // Close menu and ask
                             toolDropdown.style.display = 'none';
                             addBtn.innerText = 'add';
                             addBtn.style.transform = 'rotate(0deg)';
@@ -1016,25 +1090,21 @@
                 }, 1000);
             }
             else if (step === 7) {
-                // Step 7: Deep Research (Show submenu hover & selection)
+                // Step 7: Deep Research
                 currentModel.innerText = "Flash";
                 setTimeout(() => {
-                    // Click '+' button
                     addBtn.innerText = 'close';
                     addBtn.style.transform = 'rotate(90deg)';
                     toolDropdown.style.display = 'block';
                     
                     setTimeout(() => {
-                        // Highlight 'その他のツール' and show submenu
                         document.getElementById('tool-others').style.background = 'var(--sidebar-hover)';
                         subToolDropdown.style.display = 'block';
                         
                         setTimeout(() => {
-                            // Highlight 'Deep Research'
                             document.getElementById('tool-deep').style.background = 'var(--sidebar-hover)';
                             
                             setTimeout(() => {
-                                // Close menus and start Deep Research
                                 toolDropdown.style.display = 'none';
                                 subToolDropdown.style.display = 'none';
                                 addBtn.innerText = 'add';
@@ -1061,18 +1131,42 @@
                 }, 1000);
             }
             else if (step === 8) {
-                // Step 8: Gem
-                currentModel.innerText = "Flash";
-                chatArea.innerHTML = `
-                    <div style="width: 100%; background: var(--bg); padding: 16px; border-radius: 16px; border: 1px solid var(--border); border-left: 4px solid var(--red); box-shadow:var(--shadow); margin-top: 30px;">
-                        <h4 style="margin-bottom: 10px; font-size:0.85rem; color:var(--primary); font-weight:700;">新規 Gem の作成</h4>
-                        <label style="display:block; color:var(--text-muted); font-size:0.7rem; margin-bottom:4px; font-weight:600;">Gemの名前</label>
-                        <input type="text" value="英語スピーキング相手" style="width:100%; background:var(--sidebar-bg); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; margin-bottom:12px; font-size:0.78rem; font-weight:500;" readonly>
-                        <label style="display:block; color:var(--text-muted); font-size:0.7rem; margin-bottom:4px; font-weight:600;">指示（プロンプト）</label>
-                        <textarea style="width:100%; height:60px; background:var(--sidebar-bg); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; font-size:0.78rem; resize:none; font-family:inherit; line-height:1.45;" readonly>あなたは中学校の英語の先生です。簡単な英語で対話し、表現の誤りがあれば優しく教えてください。</textarea>
-                    </div>
-                `;
-                triggerRestart(5000);
+                // Step 8: Interactive Gem Suite (Screenshot replica)
+                chatArea.style.display = 'none';
+                bottomContainer.style.display = 'none';
+                gemWorkspace.style.display = 'flex';
+                
+                setTimeout(() => {
+                    // Type Gem Name (Simulated)
+                    typeText(gemNameField, "英語スピーキング相手", 30, () => {
+                        gemHeaderTitle.innerText = "英語スピーキング相手";
+                        
+                        // Type Gem Description
+                        setTimeout(() => {
+                            typeText(gemDescField, "中学校の英語の授業や自習で使える、優しい対話型英語学習アシスタントです。", 20, () => {
+                                
+                                // Type Custom Instructions
+                                setTimeout(() => {
+                                    typeTextarea(gemInstructionField, "あなたは中学校の親しみやすい英語の先生です。生徒が簡単な英語で話しかけてくるので、明るく対話し、表現に誤りがあれば優しく教えてください。質問は1回につき1つに留めてください。", 15, () => {
+                                        
+                                        // Activate Save Button
+                                        gemSaveButton.classList.add('active');
+                                        gemSaveButton.style.cursor = 'pointer';
+                                        
+                                        // Update Preview Panel
+                                        gemPreviewIcon.style.color = 'var(--primary)';
+                                        gemPreviewText.innerHTML = `
+                                            <div style="font-weight:700; font-size:1.1rem; color:var(--text); margin-bottom:4px;">英語スピーキング相手</div>
+                                            <div style="font-size:0.75rem; color:var(--text-muted); max-width:280px; margin:0 auto; line-height:1.4;">中学校の親しみやすい英語の先生として、楽しくスピーキングをサポートします。</div>
+                                        `;
+                                        
+                                        triggerRestart(9000);
+                                    });
+                                }, 1000);
+                            });
+                        }, 1000);
+                    });
+                }, 1000);
             }
             else if (step === 9) {
                 // Step 9: Workspace
