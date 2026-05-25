@@ -413,8 +413,8 @@
                 }, 1000);
             }
             else if (step === 3) {
-                // Step 3: Model Switch
-                addBubble('user', "複雑な数学の指導案を作成して");
+                // Step 3: Model Switch (Gemini Omni true multimodality)
+                addBubble('user', "数学の立体図形について、動画付きのアニメーション教材と解説を一緒に作って");
                 setTimeout(() => {
                     modelSelect.style.borderColor = 'var(--primary)';
                     modelDropdown.style.display = 'block';
@@ -423,8 +423,8 @@
                         currentModel.style.color = 'var(--primary)';
                         modelDropdown.style.display = 'none';
                         setTimeout(() => {
-                            addBubble('ai', "<b>[Gemini Omni 起動]</b> 複雑な指導案ですね。Imagen 3による説明図解やCanvasによる編集案も含めた、マルチモーダルな最適指導案を論理構築します。");
-                            triggerRestart(4000);
+                            addBubble('ai', "<b>[Gemini Omni 起動]</b> 立体図形のアニメーション教材ですね。Gemini Omniのネイティブマルチモーダル処理により、展開図の動画生成、ナレーション音声、および解説テキストをすべて統合したインタラクティブ教材を自律生成します。");
+                            triggerRestart(5000);
                         }, 1000);
                     }, 1500);
                 }, 1000);

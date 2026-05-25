@@ -55,8 +55,8 @@
                     <p>Gemini 3.5 Flash 超速応答</p>
                 </div>
                 <div class="floating-card card-2" style="border-left-color: var(--red-color);">
-                    <span class="material-symbols-outlined" style="color:var(--red-color);">psychology</span>
-                    <p>Gemini Omni 高度推論</p>
+                    <span class="material-symbols-outlined" style="color:var(--red-color);">video_library</span>
+                    <p>Gemini Omni 統合表現</p>
                 </div>
             </div>
         </section>
@@ -124,7 +124,7 @@
                             <div class="step-text">
                                 <h3 class="step-title">モデルの切り替え</h3>
                                 <p>画面上部のモデル切り替えから最適なモデルを選びます。<br>
-                                <strong>Gemini 3.5 Flash</strong> は大量の校務作業（議事録要約など）を瞬時に終わらせる高速性を持ち、<strong>Gemini Omni</strong> はグラフの分析や複雑な指導案作成などの論理推論に長けています。</p>
+                                <strong>Gemini 3.5 Flash</strong> は、エージェント処理やプログラミング、校務のテキスト要約などを圧倒的スピードで実行する高速特化モデルです。一方、最新の <strong>Gemini Omni</strong> は、テキスト、画像、音声、動画をひとつのモデルで同時に処理・生成するネイティブマルチモーダルモデルであり、対話型の動画編集や直感的な教材生成などに優れています。</p>
                             </div>
                             <div class="step-video">
                                 <div class="browser-mockup">
@@ -296,6 +296,34 @@
                         <p>文章作成やアイデア整理から、簡単なプログラミングや教育アプリ作成まで、直感的なドキュメント作業エリアでAIとリアルタイムで共同編集できる最新インタフェース機能です。</p>
                     </div>
                 </div>
+
+                <!-- 重要キーワード習得ミニクイズ -->
+                <div class="quiz-container glass-card fade-in" style="margin-top: 3rem; border-top: 5px solid var(--yellow-color);">
+                    <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem;">
+                        <span class="material-symbols-outlined" style="font-size:2.2rem; color:var(--yellow-color);">quiz</span>
+                        <h3 style="font-size:1.5rem; font-weight:800; margin:0;">重要キーワード確認ミニクイズ</h3>
+                    </div>
+                    <p style="color:var(--text-muted); margin-bottom:1.5rem; font-size:0.95rem;">今学んだ最新キーワードの理解度をテストしましょう！全3問のクイズに答えて全問正解を目指してください。</p>
+                    
+                    <div id="quiz-box">
+                        <div class="quiz-progress-wrapper" style="width:100%; height:6px; background:#ddd; border-radius:3px; margin-bottom:1.5rem; position:relative; overflow:hidden;">
+                            <div id="quiz-progress-bar" style="width:0%; height:100%; background:var(--primary-color); transition:width 0.3s; border-radius:3px;"></div>
+                        </div>
+                        <div id="quiz-question-container">
+                            <h4 id="quiz-question" style="font-size:1.15rem; font-weight:800; margin-bottom:1.2rem; display:flex; align-items:center; gap:6px;">
+                                <span id="quiz-q-num" style="background:var(--primary-color); color:white; width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem;">1</span>
+                                <span id="quiz-q-text">問題がここに表示されます</span>
+                            </h4>
+                            <div id="quiz-options" style="display:flex; flex-direction:column; gap:0.8rem; margin-bottom:1.5rem;">
+                                <!-- 選択肢がJSで生成されます -->
+                            </div>
+                        </div>
+                        <div id="quiz-feedback" style="display:none; padding:1.2rem; border-radius:12px; margin-bottom:1.5rem; line-height:1.5; font-size:0.9rem;">
+                            <!-- 正誤判定と解説がここに表示されます -->
+                        </div>
+                        <button id="quiz-action-btn" class="btn btn-primary" style="display:none; width:100%; justify-content:center; gap:6px;">次の問題へ <span class="material-symbols-outlined">arrow_forward</span></button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -321,5 +349,158 @@
     </footer>
 
     <script src="./script.js"></script>
+    <script>
+        const quizData = [
+            {
+                question: "テキストの指示から高精細な画像を生成したり、既存の画像の一部を再編集・追加できる、Geminiの裏側で動作する最新モデルはどれ？",
+                options: ["Veo", "Imagen 3", "Canvas"],
+                correct: 1,
+                explanation: "正解は **Imagen 3** です！テキストプロンプト（指示文）から高精細かつ意図に沿ったイラストや写真を瞬時に生成する、Googleの画像生成AIです。"
+            },
+            {
+                question: "テキストプロンプトから、まるで映画のような極めてリアルな1080p（フルHD）動画を自動生成できる最新の動画生成モデルはどれ？",
+                options: ["Veo", "Canvas", "Imagen 3"],
+                correct: 0,
+                explanation: "正解は **Veo** です！Googleの最先端の動画生成AIで、高い写実性、一貫性のあるカメラワーク、物理法則の理解に基づいて、クリエイティブな映像教材などを自動構築できます。"
+            },
+            {
+                question: "AIとリアルタイムで共同編集しながら、指導案や授業資料の作成、あるいは簡単なプログラミングやアプリ開発まで行える、直感的なドキュメント作業エリア機能はどれ？",
+                options: ["Learn", "Canvas", "Gem"],
+                correct: 1,
+                explanation: "正解は **Canvas** です！単なるチャットでのやり取りを超え、AIと2人でひとつのドキュメントを直接リアルタイムで編集・改修し続けられる、生産性を劇的に高める機能です。"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizQNum = document.getElementById('quiz-q-num');
+        const quizQText = document.getElementById('quiz-q-text');
+        const quizOptions = document.getElementById('quiz-options');
+        const quizFeedback = document.getElementById('quiz-feedback');
+        const quizProgressBar = document.getElementById('quiz-progress-bar');
+        const quizActionBtn = document.getElementById('quiz-action-btn');
+
+        function loadQuestion() {
+            // クイズタイトル表示の復活
+            quizQNum.parentElement.style.display = 'flex';
+            
+            const currentQuestion = quizData[currentQuestionIndex];
+            
+            // 進捗バー
+            const progress = (currentQuestionIndex / quizData.length) * 100;
+            quizProgressBar.style.width = `${progress}%`;
+            
+            quizQNum.innerText = currentQuestionIndex + 1;
+            quizQText.innerText = currentQuestion.question;
+            
+            // 選択肢のクリア＆追加
+            quizOptions.innerHTML = '';
+            currentQuestion.options.forEach((option, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-secondary quiz-opt-btn';
+                btn.style.width = '100%';
+                btn.style.justifyContent = 'flex-start';
+                btn.style.padding = '0.9rem 1.5rem';
+                btn.style.textAlign = 'left';
+                btn.style.fontSize = '0.9rem';
+                btn.style.fontWeight = '600';
+                btn.style.borderRadius = '12px';
+                btn.innerHTML = `<span style="background:var(--primary-light); color:var(--primary-color); width:20px; height:20px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-right:10px; font-size:0.75rem;">${idx + 1}</span> ${option}`;
+                btn.onclick = () => selectOption(idx);
+                quizOptions.appendChild(btn);
+            });
+            
+            quizFeedback.style.display = 'none';
+            quizActionBtn.style.display = 'none';
+        }
+
+        function selectOption(selectedIdx) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            const optionButtons = quizOptions.querySelectorAll('.quiz-opt-btn');
+            
+            // すべてのボタンを選択不可にする
+            optionButtons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === currentQuestion.correct) {
+                    btn.style.borderColor = 'var(--green-color)';
+                    btn.style.background = '#e6f4ea';
+                    btn.style.color = '#0d652d';
+                } else if (idx === selectedIdx) {
+                    btn.style.borderColor = 'var(--red-color)';
+                    btn.style.background = '#fce8e6';
+                    btn.style.color = '#a50e0e';
+                }
+            });
+            
+            const isCorrect = selectedIdx === currentQuestion.correct;
+            if (isCorrect) score++;
+            
+            // フィードバック表示
+            quizFeedback.style.display = 'block';
+            if (isCorrect) {
+                quizFeedback.style.background = '#e6f4ea';
+                quizFeedback.style.color = '#0d652d';
+                quizFeedback.style.border = '1px solid var(--green-color)';
+                quizFeedback.innerHTML = `<strong>🟢 正解です！</strong><br>${currentQuestion.explanation}`;
+            } else {
+                quizFeedback.style.background = '#fce8e6';
+                quizFeedback.style.color = '#a50e0e';
+                quizFeedback.style.border = '1px solid var(--red-color)';
+                quizFeedback.innerHTML = `<strong>🔴 不正解...</strong><br>${currentQuestion.explanation}`;
+            }
+            
+            // アクションボタンの表示
+            quizActionBtn.style.display = 'flex';
+            if (currentQuestionIndex === quizData.length - 1) {
+                quizActionBtn.innerHTML = `結果発表を見る <span class="material-symbols-outlined">emoji_events</span>`;
+            } else {
+                quizActionBtn.innerHTML = `次の問題へ <span class="material-symbols-outlined">arrow_forward</span>`;
+            }
+        }
+
+        quizActionBtn.onclick = () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        };
+
+        function showResult() {
+            quizProgressBar.style.width = '100%';
+            quizOptions.innerHTML = '';
+            quizFeedback.style.display = 'none';
+            quizActionBtn.style.display = 'flex';
+            quizActionBtn.innerHTML = `もう一度挑戦する <span class="material-symbols-outlined">refresh</span>`;
+            quizActionBtn.onclick = () => {
+                currentQuestionIndex = 0;
+                score = 0;
+                loadQuestion();
+            };
+            
+            let rank = "";
+            let color = "var(--primary-color)";
+            if (score === 3) { rank = "ゴールドエデュケーター級（全問正解！完璧です！）"; color = "var(--yellow-color)"; }
+            else if (score === 2) { rank = "シルバー級（もう一歩で完璧です！）"; }
+            else { rank = "ブロンズ級（もう一度キーワードを確認しましょう！）"; }
+            
+            quizQNum.parentElement.style.display = 'none';
+            quizQText.innerHTML = `
+                <div style="text-align:center; padding:1.5rem 0;">
+                    <span class="material-symbols-outlined" style="font-size:4rem; color:${color}; margin-bottom:10px;">emoji_events</span>
+                    <h3 style="font-size:1.6rem; font-weight:800; margin-bottom:8px;">クイズ完了！</h3>
+                    <p style="font-size:1.1rem; font-weight:600; margin-bottom:6px;">正解数: <span style="font-size:1.5rem; color:${color}; font-weight:800;">${score} / 3</span></p>
+                    <div style="background:var(--bg-color); border:1px solid var(--border-color); padding:0.8rem; border-radius:8px; display:inline-block; font-weight:800; color:var(--text-main); margin-top:8px;">
+                        評価: ${rank}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 初期ロード
+        loadQuestion();
+    </script>
 </body>
 </html>
