@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Gemini Mock Demo</title>
     <!-- Google Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         :root {
@@ -13,21 +13,32 @@
             --yellow: #f9ab00;     /* Google Yellow */
             --green: #34a853;      /* Google Green */
             
-            --bg: #f0f4f9;         /* Google Light warm gray */
-            --sidebar: #ffffff;
-            --text: #202124;
+            --bg: #ffffff;
+            --main-bg: #f8fafd;     /* Soft warm light blue-gray gradient start */
+            --sidebar-bg: #f0f4f9;
+            --sidebar-hover: #e3e8ef;
+            --border: #e3e8ef;
+            --text: #1f1f1f;
             --text-muted: #5f6368;
-            --input-bg: #ffffff;
-            --border: #dadce0;
+            --input-bg: #f0f4f9;
+            --dropdown-bg: #ffffff;
+            --shadow: 0 4px 16px rgba(0,0,0,0.08);
+            --pill-gray: #e3e8ef;
         }
         [data-theme="dark"] {
-            --bg: #202124;
-            --sidebar: #2d2d30;
-            --text: #f1f3f4;
-            --text-muted: #bdc1c6;
-            --input-bg: #2d2d30;
-            --border: #3c4043;
+            --bg: #131314;
+            --main-bg: #131314;
+            --sidebar-bg: #1e1e20;
+            --sidebar-hover: #2e2f31;
+            --border: #2e2f31;
+            --text: #e3e3e3;
+            --text-muted: #c4c7c5;
+            --input-bg: #1e1e20;
+            --dropdown-bg: #2e2f31;
+            --shadow: 0 4px 16px rgba(0,0,0,0.3);
+            --pill-gray: #2e2f31;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
@@ -36,191 +47,468 @@
             display: flex;
             height: 100vh;
             overflow: hidden;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             transition: all 0.3s;
         }
-        /* Sidebar */
+
+        /* Left Sidebar: Exact Replica */
         .sidebar {
-            width: 180px;
-            background: var(--sidebar);
-            padding: 15px;
+            width: 250px;
+            background: var(--sidebar-bg);
+            padding: 16px 12px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
             border-right: 1px solid var(--border);
+            height: 100%;
+            overflow-y: auto;
+            flex-shrink: 0;
         }
-        .logo {
-            font-size: 1.1rem;
-            font-weight: 800;
+
+        .sidebar-header {
             display: flex;
             align-items: center;
-            gap: 6px;
-            background: linear-gradient(135deg, var(--primary), var(--red), var(--yellow), var(--green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 0 8px;
         }
-        .nav-item {
+
+        .logo {
+            font-size: 1.15rem;
+            font-weight: 500;
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            transition: background 0.2s, color 0.2s;
+            color: var(--text);
         }
-        .nav-item:hover, .nav-item.active {
-            background: var(--bg);
-            color: var(--primary);
-        }
-        .nav-item span { font-size: 16px; }
 
-        /* Main Chat */
+        .logo-icon {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #1a73e8, #ea4335, #f9ab00, #34a853);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .toggle-sidebar-btn {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        /* Core actions */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.82rem;
+            transition: background 0.2s;
+            margin-bottom: 4px;
+        }
+
+        .nav-item:hover {
+            background: var(--sidebar-hover);
+        }
+
+        .nav-item.active-chat-btn {
+            background: var(--sidebar-hover);
+            font-weight: 700;
+        }
+
+        .nav-item span {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        /* Sidebar Sections */
+        .section-header {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin: 18px 0 8px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .recent-list, .notebook-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.78rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .list-item:hover {
+            background: var(--sidebar-hover);
+        }
+
+        .list-item-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .list-item-content span {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .list-item-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .pin-icon {
+            font-size: 1rem !important;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
+        /* User Profile Area */
+        .user-profile-wrapper {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 6px;
+            padding-right: 6px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #d7ccc8; /* Soft warm brown like actual photo */
+            background-image: radial-gradient(circle, #ffe0b2, #d7ccc8);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #5d4037;
+            font-size: 0.75rem;
+        }
+
+        .user-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+
+        .user-plan {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .settings-icon {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* Main Workspace */
         .main-chat {
             flex: 1;
             display: flex;
             flex-direction: column;
+            background: radial-gradient(circle at 50% 30%, rgba(26,115,232,0.03), transparent 60%), var(--bg);
+            height: 100%;
             position: relative;
         }
-        .header {
-            padding: 10px 20px;
+
+        .header-top {
+            position: absolute;
+            top: 12px;
+            right: 16px;
             display: flex;
-            justify-content: space-between;
+            gap: 12px;
             align-items: center;
-            border-bottom: 1px solid var(--border);
-            background: var(--sidebar);
+            z-index: 5;
         }
-        .model-selector {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg);
-            padding: 6px 12px;
-            border-radius: 20px;
+
+        .pen-btn {
+            color: var(--text-muted);
             cursor: pointer;
-            font-weight: 600;
-            border: 1px solid var(--border);
-            font-size: 0.78rem;
+            font-size: 1.3rem;
         }
+
         .chat-area {
             flex: 1;
-            padding: 15px;
+            padding: 80px 10% 120px 10%;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 24px;
             width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
         }
+
+        /* Welcome Greeting (Screenshot replica) */
+        .welcome-greeting {
+            margin: auto;
+            text-align: center;
+            font-size: 2.4rem;
+            font-weight: 400;
+            color: var(--text);
+            opacity: 0.85;
+            letter-spacing: -0.5px;
+            padding-bottom: 40px;
+            animation: fadeIn 0.6s ease;
+        }
+
         .bubble {
             display: flex;
-            gap: 10px;
-            max-width: 90%;
+            gap: 16px;
+            max-width: 100%;
             animation: fadeIn 0.4s ease forwards;
         }
+
         .bubble.user {
             align-self: flex-end;
             flex-direction: row-reverse;
         }
+
         .bubble-avatar {
-            width: 26px;
-            height: 26px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             flex-shrink: 0;
             color: white;
+            border: 1px solid var(--border);
         }
-        .bubble.user .bubble-avatar { background: var(--primary); }
+
+        .bubble.user .bubble-avatar {
+            background: #1a73e8;
+            background-image: radial-gradient(circle, #4285f4, #1a73e8);
+        }
+
         .bubble.ai .bubble-avatar {
             background: linear-gradient(135deg, var(--primary), var(--red), var(--yellow), var(--green));
         }
+
         .bubble-content {
-            background: var(--sidebar);
-            padding: 8px 14px;
-            border-radius: 14px;
-            line-height: 1.5;
-            font-size: 0.8rem;
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(60,64,67,0.05);
+            background: transparent;
+            padding: 4px 8px;
+            line-height: 1.6;
+            font-size: 0.88rem;
+            color: var(--text);
+            max-width: 85%;
         }
 
-        /* Input Area */
-        .input-area {
-            padding: 10px 15px 15px;
-            width: 100%;
+        .bubble.user .bubble-content {
+            background: var(--sidebar-bg);
+            border-radius: 18px;
+            padding: 10px 16px;
         }
-        .input-box {
+
+        /* Floating Input Bar (Replica of the elegant bottom floating bar) */
+        .bottom-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 10% 24px 10%;
+            background: linear-gradient(to top, var(--bg) 60%, transparent);
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .input-box-wrapper {
+            width: 100%;
+            max-width: 700px;
             background: var(--input-bg);
-            border-radius: 20px;
-            padding: 4px 14px;
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            padding: 8px 16px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            border: 1px solid var(--border);
-            box-shadow: 0 1px 3px rgba(60,64,67,0.05);
+            gap: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s, border-color 0.2s;
+            position: relative;
         }
-        .input-box input {
+
+        .input-box-wrapper:focus-within {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-color: var(--primary);
+        }
+
+        .add-icon {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.35rem;
+        }
+
+        .input-box-wrapper input {
             flex: 1;
             background: transparent;
             border: none;
             color: var(--text);
-            font-size: 0.8rem;
+            font-size: 0.88rem;
             outline: none;
-            padding: 6px 0;
-        }
-        .input-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-        }
-        .input-actions span {
-            cursor: pointer;
-            font-size: 18px;
-        }
-        .send-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            padding: 8px 0;
         }
 
-        /* Elements for specific steps */
+        /* Model Selector in Input Pill */
+        .model-selector-pill {
+            background: var(--pill-gray);
+            border-radius: 20px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.78rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid transparent;
+            transition: background 0.2s;
+            user-select: none;
+        }
+
+        .model-selector-pill:hover {
+            background: var(--sidebar-hover);
+        }
+
+        .mic-icon {
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1.25rem;
+            margin-left: 4px;
+        }
+
+        /* Model Dropdown Menu (Exact Replica from Screenshot) */
+        .model-dropdown {
+            position: absolute;
+            bottom: 58px;
+            right: 48px;
+            background: var(--dropdown-bg);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 6px;
+            width: 230px;
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 100;
+            font-size: 0.78rem;
+            animation: popUp 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--sidebar-bg);
+        }
+
+        .dropdown-item-meta {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.35;
+        }
+
+        .dropdown-item-title {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .dropdown-item-desc {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+        }
+
+        .dropdown-item-check {
+            font-size: 1rem;
+            color: var(--text);
+            font-weight: bold;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 6px 4px;
+        }
+
+        /* Toast Popup */
         .toast {
             position: absolute;
-            bottom: 70px;
+            bottom: 85px;
             left: 50%;
             transform: translateX(-50%);
             background: #323232;
             color: white;
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            font-weight: 600;
+            font-weight: 500;
             font-size: 0.75rem;
             display: none;
+            z-index: 1000;
             animation: slideUp 0.3s ease;
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes popUp {
+            from { opacity: 0; transform: scale(0.95) translateY(5px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
         @keyframes slideUp {
-            from { bottom: 50px; opacity: 0; }
-            to { bottom: 70px; opacity: 1; }
+            from { bottom: 65px; opacity: 0; }
+            to { bottom: 85px; opacity: 1; }
         }
         .cursor {
             display: inline-block;
@@ -233,91 +521,197 @@
         }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* Dropdown mockup */
-        .dropdown-menu {
-            position: absolute;
-            top: 40px;
-            left: 15px;
-            background: var(--sidebar);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 4px 0;
-            width: 140px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            display: none;
-            z-index: 10;
-            font-size: 0.75rem;
-        }
-        .dropdown-item {
-            padding: 6px 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .dropdown-item:hover { background: var(--bg); }
-
-        /* Workspace chip */
         .workspace-chip {
-            background: var(--primary-light);
+            background: rgba(26, 115, 232, 0.1);
             border: 1px solid rgba(26, 115, 232, 0.2);
             color: var(--primary);
             padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.72rem;
-            margin-bottom: 3px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            margin-bottom: 2px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
+    <!-- Left Sidebar: Exact Screen Replica -->
     <div class="sidebar">
-        <div class="logo">
-            <span class="material-symbols-outlined" style="font-size: 18px;">auto_awesome</span>
-            Gemini
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="material-symbols-outlined logo-icon">auto_awesome</span>
+                Gemini
+            </div>
+            <span class="material-symbols-outlined toggle-sidebar-btn">menu_open</span>
         </div>
-        <div style="flex: 1; display:flex; flex-direction:column; gap:4px;">
-            <div class="nav-item active" id="nav-chat"><span class="material-symbols-outlined">chat</span>新規チャット</div>
-            <div class="nav-item" id="nav-gem"><span class="material-symbols-outlined">deployed_code</span>Gemの管理</div>
+
+        <div class="nav-item active-chat-btn">
+            <span class="material-symbols-outlined">chat_bubble</span>
+            チャットを新規作成
+        </div>
+        <div class="nav-item">
+            <span class="material-symbols-outlined">search</span>
+            チャットを検索
+        </div>
+        <div class="nav-item">
+            <span class="material-symbols-outlined">library_books</span>
+            ライブラリ
+        </div>
+        <div class="nav-item">
+            <span class="material-symbols-outlined">deployed_code</span>
+            Gem
+        </div>
+
+        <div class="section-header">ノートブック</div>
+        <div class="notebook-list">
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">add</span>
+                    <div class="list-item-text">ノートブックを新規作成</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">description</span>
+                    <div class="list-item-text">I/O 2026</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">description</span>
+                    <div class="list-item-text">ICT担当者あるある</div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">folder</span>
+                    <div class="list-item-text">すべてのノートブック</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">最近</div>
+        <div class="recent-list">
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">star</span>
+                    <div class="list-item-text">☆ICT活用プラットフォーム開発</div>
+                </div>
+                <span class="material-symbols-outlined pin-icon">push_pin</span>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">chat</span>
+                    <div class="list-item-text">・生物育成授業！！！（</div>
+                </div>
+                <span class="material-symbols-outlined pin-icon">push_pin</span>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">chat</span>
+                    <div class="list-item-text">技術・情報科授業教材計画作成</div>
+                </div>
+                <span class="material-symbols-outlined pin-icon">push_pin</span>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">chat</span>
+                    <div class="list-item-text">生徒の思考を深める学習ファシリテ...</div>
+                </div>
+                <span class="material-symbols-outlined pin-icon">push_pin</span>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">chat</span>
+                    <div class="list-item-text">中学生向け生成AI授業計画</div>
+                </div>
+                <span class="material-symbols-outlined pin-icon">push_pin</span>
+            </div>
+            <div class="list-item">
+                <div class="list-item-content">
+                    <span class="material-symbols-outlined">chat</span>
+                    <div class="list-item-text">0122準備</div>
+                </div>
+                <span class="material-symbols-outlined pin-icon">push_pin</span>
+            </div>
+        </div>
+
+        <!-- User Profile (Exact Match) -->
+        <div class="user-profile-wrapper">
+            <div class="user-info">
+                <div class="user-avatar">SK</div>
+                <div class="user-meta">
+                    <span class="user-name">Shunta Katsuse</span>
+                    <span class="user-plan">Pro</span>
+                </div>
+            </div>
+            <span class="material-symbols-outlined settings-icon">settings</span>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main Chat Workspace -->
     <div class="main-chat">
-        <div class="header">
-            <div style="position: relative;">
-                <div class="model-selector" id="model-select">
-                    <span id="current-model">Gemini 3.5 Flash</span>
+        <div class="header-top">
+            <span class="material-symbols-outlined pen-btn">edit</span>
+        </div>
+
+        <div class="chat-area" id="chat-area">
+            <!-- Centered Greeting Replica -->
+            <div class="welcome-greeting" id="welcome-greeting">
+                いつでも話しかけてください
+            </div>
+        </div>
+
+        <!-- Floating bottom container -->
+        <div class="bottom-container">
+            <div class="input-box-wrapper" id="input-wrapper">
+                <span class="material-symbols-outlined add-icon">add</span>
+                <input type="text" id="chat-input" placeholder="Gemini に相談" readonly>
+                
+                <!-- Model Selector Inside Input Pill -->
+                <div class="model-selector-pill" id="model-select">
+                    <span id="current-model">Pro</span>
                     <span class="material-symbols-outlined" style="font-size: 14px;">arrow_drop_down</span>
                 </div>
-                <div class="dropdown-menu" id="model-dropdown">
-                    <div class="dropdown-item">Gemini 3.5 Flash</div>
-                    <div class="dropdown-item" style="color: var(--primary);">Gemini Omni <span class="material-symbols-outlined" style="font-size:12px;">star</span></div>
+                
+                <span class="material-symbols-outlined mic-icon">mic</span>
+            </div>
+
+            <!-- Model Dropdown Menu (Exact Replica from Screenshot) -->
+            <div class="model-dropdown" id="model-dropdown">
+                <div class="dropdown-item" id="opt-lite">
+                    <div class="dropdown-item-meta">
+                        <span class="dropdown-item-title">3.1 Flash-Lite</span>
+                        <span class="dropdown-item-desc">すばやく回答を得るのに最適</span>
+                    </div>
+                </div>
+                <div class="dropdown-item" id="opt-flash">
+                    <div class="dropdown-item-meta">
+                        <span class="dropdown-item-title">3.5 Flash</span>
+                        <span class="dropdown-item-desc">あらゆる場面でサポート</span>
+                    </div>
+                </div>
+                <div class="dropdown-item" id="opt-pro">
+                    <div class="dropdown-item-meta">
+                        <span class="dropdown-item-title">3.1 Pro</span>
+                        <span class="dropdown-item-desc">高度な数学とコード</span>
+                    </div>
+                    <span class="material-symbols-outlined dropdown-item-check" id="pro-check">check</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item">
+                    <div class="dropdown-item-meta">
+                        <span class="dropdown-item-title">思考レベル</span>
+                        <span class="dropdown-item-desc">標準</span>
+                    </div>
+                    <span class="material-symbols-outlined" style="font-size:12px; color:var(--text-muted);">arrow_forward_ios</span>
                 </div>
             </div>
-            <span class="material-symbols-outlined" style="font-size: 24px; color: var(--text-muted);">account_circle</span>
         </div>
 
-        <div class="chat-area" id="chat-area"></div>
-
-        <div class="input-area">
-            <div class="input-box" id="input-box-wrapper">
-                <input type="text" id="chat-input" placeholder="ここにプロンプトを入力..." readonly>
-                <div class="input-actions">
-                    <span class="material-symbols-outlined">add_circle</span>
-                    <span class="material-symbols-outlined">mic</span>
-                    <button class="send-btn" id="send-btn">
-                        <span class="material-symbols-outlined" style="color: white; font-size:14px;">send</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="toast" id="toast">Googleドキュメントにエクスポートしました</div>
+        <div class="toast" id="toast">Google ドキュメントにエクスポートしました</div>
     </div>
 
     <script>
@@ -325,10 +719,10 @@
         const step = parseInt(urlParams.get('step')) || 1;
         const chatArea = document.getElementById('chat-area');
         const chatInput = document.getElementById('chat-input');
-        const sendBtn = document.getElementById('send-btn');
         const modelSelect = document.getElementById('model-select');
         const currentModel = document.getElementById('current-model');
         const modelDropdown = document.getElementById('model-dropdown');
+        const welcomeGreeting = document.getElementById('welcome-greeting');
         const toast = document.getElementById('toast');
 
         // Dark mode synchronization
@@ -358,6 +752,10 @@
 
         // Add bubble
         function addBubble(sender, text, callback) {
+            // Hide welcome greeting on first message
+            if (welcomeGreeting) {
+                welcomeGreeting.style.display = 'none';
+            }
             const bubble = document.createElement('div');
             bubble.className = `bubble ${sender}`;
             bubble.innerHTML = `
@@ -379,33 +777,34 @@
         window.onload = () => {
             if (step === 1) {
                 // Step 1: Access
+                currentModel.innerText = "3.5 Flash";
                 chatArea.innerHTML = `
-                    <div style="text-align: center; margin-top: 50px;">
+                    <div style="text-align: center; margin-top: 100px;">
                         <span class="material-symbols-outlined" style="font-size: 40px; color: var(--primary); animation: pulse 2s infinite;">login</span>
-                        <h4 style="margin-top:8px;">Googleアカウントでログイン</h4>
-                        <p style="color: var(--text-muted); margin-top: 4px; font-size:0.75rem;">教育向けアカウントは安全データ保護対象です。</p>
-                        <button style="background: var(--primary); color:white; border:none; padding: 6px 12px; border-radius: 20px; font-weight:600; margin-top: 10px; cursor: pointer; font-size:0.75rem;" id="login-btn">ログインする</button>
+                        <h4 style="margin-top:12px; font-weight:600; font-size:1.1rem;">Google アカウントでログイン</h4>
+                        <p style="color: var(--text-muted); margin-top: 6px; font-size:0.8rem;">教育用の Google Workspace アカウントは安全なデータ保護対象です。</p>
+                        <button style="background: var(--primary); color:white; border:none; padding: 8px 16px; border-radius: 20px; font-weight:600; margin-top: 15px; cursor: pointer; font-size:0.8rem;" id="login-btn">ログインする</button>
                     </div>
                 `;
                 setTimeout(() => {
                     const btn = document.getElementById('login-btn');
                     btn.innerText = "ログイン中...";
                     setTimeout(() => {
-                        chatArea.innerHTML = `<div style="text-align:center; margin-top:50px; color:var(--text-muted);">データ保護対象の安全なGeminiにログインしました！</div>`;
+                        chatArea.innerHTML = `<div style="text-align:center; margin-top:100px; color:var(--text-muted); font-weight:600;">データ保護対象の安全なGeminiにログインしました！</div>`;
                         triggerRestart(1500);
                     }, 800);
                 }, 2000);
             } 
             else if (step === 2) {
                 // Step 2: Prompt Input
+                currentModel.innerText = "3.5 Flash";
                 setTimeout(() => {
                     typeText(chatInput, "小学5年生向けの理科『植物の発芽』の導入で使える、面白いクイズを3つ作って", 35, () => {
                         setTimeout(() => {
-                            sendBtn.style.background = 'var(--primary)';
                             addBubble('user', chatInput.value);
                             chatInput.value = '';
                             setTimeout(() => {
-                                addBubble('ai', "植物の発芽に関する導入クイズですね！<br><br>1. 種が発芽するために、絶対に必要「ではない」ものは？（日光、水、空気）<br>2. 冷蔵庫の中に入れた種は発芽する？<br>3. 水に沈めっぱなしにした種はどうなる？");
+                                addBubble('ai', "植物の発芽に関する導入クイズですね！<br><br><b>1. 種が発芽するために、絶対に必要「ではない」ものは？</b>（日光、水、空気）<br><b>2. 冷蔵庫の中に入れた種は発芽する？</b><br><b>3. 水に沈めっぱなしにした種はどうなる？</b><br><br>子どもたちが直感的に考え、議論を広げやすい題材です。");
                                 triggerRestart(5000);
                             }, 1000);
                         }, 800);
@@ -413,31 +812,39 @@
                 }, 1000);
             }
             else if (step === 3) {
-                // Step 3: Model Switch (Gemini Omni true multimodality)
+                // Step 3: Model Switch (Using exact screenshot models)
+                currentModel.innerText = "3.5 Flash";
                 addBubble('user', "数学の立体図形について、動画付きのアニメーション教材と解説を一緒に作って");
                 setTimeout(() => {
                     modelSelect.style.borderColor = 'var(--primary)';
-                    modelDropdown.style.display = 'block';
                     setTimeout(() => {
-                        currentModel.innerText = "Gemini Omni";
-                        currentModel.style.color = 'var(--primary)';
-                        modelDropdown.style.display = 'none';
+                        modelDropdown.style.display = 'block';
                         setTimeout(() => {
-                            addBubble('ai', "<b>[Gemini Omni 起動]</b> 立体図形のアニメーション教材ですね。Gemini Omniのネイティブマルチモーダル処理により、展開図の動画生成、ナレーション音声、および解説テキストをすべて統合したインタラクティブ教材を自律生成します。");
-                            triggerRestart(5000);
-                        }, 1000);
-                    }, 1500);
+                            // Update selection in dropdown mock
+                            document.getElementById('pro-check').style.display = 'block';
+                            currentModel.innerText = "3.1 Pro";
+                            modelSelect.style.borderColor = 'transparent';
+                            setTimeout(() => {
+                                modelDropdown.style.display = 'none';
+                                setTimeout(() => {
+                                    addBubble('ai', "<b>[3.1 Pro 起動]</b> 立体図形のアニメーション教材ですね。Gemini 3.1 Proの高度なコード生成機能と、Gemini Omniのネイティブマルチモーダル処理により、展開図の動画生成、ナレーション音声、および解説テキストをすべて統合したインタラクティブ教材を自律生成します。");
+                                    triggerRestart(5500);
+                                }, 1000);
+                            }, 1000);
+                        }, 1200);
+                    }, 1000);
                 }, 1000);
             }
             else if (step === 4) {
                 // Step 4: Image Gen
+                currentModel.innerText = "3.5 Flash";
                 setTimeout(() => {
-                    typeText(chatInput, "理科の実験でフラスコを持っている可愛い犬のイラストを生成して", 35, () => {
+                    typeText(chatInput, "理科の実験でフラスコを持っている可愛い柴犬のイラストを生成して", 35, () => {
                         setTimeout(() => {
                             addBubble('user', chatInput.value);
                             chatInput.value = '';
                             setTimeout(() => {
-                                addBubble('ai', 'フラスコを持って実験をしている可愛い柴犬のイラストを生成しました！<br><div style="text-align:center;"><span class="material-symbols-outlined" style="font-size:50px; color:var(--primary); margin:5px 0;">pets</span><br><small style="color:var(--text-muted);">[Imagen 3 による生成画像]</small></div>');
+                                addBubble('ai', 'フラスコを持って実験をしている可愛い柴犬のイラストを生成しました！<br><div style="text-align:center; padding:10px 0;"><span class="material-symbols-outlined" style="font-size:60px; color:var(--primary); margin:5px 0; background:var(--sidebar-bg); padding:15px; border-radius:50%;">pets</span><br><small style="color:var(--text-muted);">[Imagen 3 による高精細イラスト生成]</small></div>');
                                 triggerRestart(5000);
                             }, 1200);
                         }, 800);
@@ -446,6 +853,7 @@
             }
             else if (step === 5) {
                 // Step 5: Guided Learning
+                currentModel.innerText = "3.5 Flash";
                 addBubble('user', "二次方程式の解き方を教えて。答えを直接教えず、ヒントを順番に出して。");
                 setTimeout(() => {
                     addBubble('ai', "素晴らしいですね！一緒に考えていきましょう。<br>式：<b>x² - 5x + 6 = 0</b><br><br>ヒント：かけて 6 になり、たして -5 になる2つの数字は何でしょうか？");
@@ -454,11 +862,12 @@
             }
             else if (step === 6) {
                 // Step 6: Export
+                currentModel.innerText = "3.5 Flash";
                 addBubble('ai', "【来週のお便り草案】<br>保護者の皆様へ<br>来週の木曜日に校外学習を予定しております。持ち物のご準備をお願いいたします...");
                 setTimeout(() => {
                     const exportBtn = document.createElement('button');
-                    exportBtn.style = "background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: 12px; display:flex; align-items:center; gap:4px; margin-top:8px; cursor:pointer; font-size:0.72rem;";
-                    exportBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px; color:var(--primary);">share</span> ドキュメントにエクスポート';
+                    exportBtn.style = "background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 16px; display:flex; align-items:center; gap:6px; margin-top:8px; cursor:pointer; font-size:0.75rem; font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.05); transition:all 0.2s;";
+                    exportBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px; color:var(--primary);">share</span> ドキュメントにエクスポート';
                     chatArea.appendChild(exportBtn);
                     setTimeout(() => {
                         exportBtn.style.background = 'var(--primary)';
@@ -473,13 +882,14 @@
             }
             else if (step === 7) {
                 // Step 7: Deep Research
+                currentModel.innerText = "3.5 Flash";
                 chatArea.innerHTML = `
-                    <div style="background: var(--sidebar); border:1px solid var(--border); border-radius: 12px; padding: 15px; border-left: 4px solid var(--primary); margin-top: 20px;">
-                        <div style="display:flex; align-items:center; gap:8px; color: var(--primary); font-weight:bold; margin-bottom:8px; font-size:0.8rem;">
-                            <span class="material-symbols-outlined" style="font-size:16px;">biotech</span> Deep Research 実行中...
+                    <div style="background: var(--bg); border:1px solid var(--border); border-radius: 16px; padding: 20px; border-left: 4px solid var(--primary); margin-top: 40px; box-shadow:var(--shadow);">
+                        <div style="display:flex; align-items:center; gap:8px; color: var(--primary); font-weight:bold; margin-bottom:10px; font-size:0.85rem;">
+                            <span class="material-symbols-outlined" style="font-size:18px;">biotech</span> Deep Research 実行中...
                         </div>
-                        <p style="color: var(--text-muted); font-size:0.75rem;">探究活動における最新の実践事例（24のWebソース）を統合分析中...</p>
-                        <div style="width: 100%; height: 3px; background: var(--bg); border-radius:2px; margin-top:8px; overflow:hidden;">
+                        <p style="color: var(--text-muted); font-size:0.78rem; line-height:1.5;">探究活動における最新の実践事例（24のWebソースや論文）を自律統合分析中...</p>
+                        <div style="width: 100%; height: 4px; background: var(--sidebar-bg); border-radius:2px; margin-top:12px; overflow:hidden;">
                             <div style="width: 70%; height: 100%; background: var(--primary); border-radius:2px; animation: progress 2.5s infinite ease-in-out;"></div>
                         </div>
                     </div>
@@ -491,27 +901,27 @@
             }
             else if (step === 8) {
                 // Step 8: Gem
-                document.getElementById('nav-gem').classList.add('active');
-                document.getElementById('nav-chat').classList.remove('active');
+                currentModel.innerText = "3.5 Flash";
                 chatArea.innerHTML = `
-                    <div style="width: 100%; background: var(--sidebar); padding: 12px; border-radius: 12px; border: 1px solid var(--border); border-left: 4px solid var(--red);">
-                        <h4 style="margin-bottom: 8px; font-size:0.8rem; color:var(--primary);">新規 Gem の作成</h4>
-                        <label style="display:block; color:var(--text-muted); font-size:0.68rem; margin-bottom:2px;">Gemの名前</label>
-                        <input type="text" value="英語スピーキング相手" style="width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:5px; border-radius:6px; margin-bottom:8px; font-size:0.72rem;" readonly>
-                        <label style="display:block; color:var(--text-muted); font-size:0.68rem; margin-bottom:2px;">指示（プロンプト）</label>
-                        <textarea style="width:100%; height:50px; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:5px; border-radius:6px; font-size:0.72rem; resize:none; font-family:inherit;" readonly>あなたは中学校の英語の先生です。簡単な英語で対話し、表現の誤りがあれば優しく教えてください。</textarea>
+                    <div style="width: 100%; background: var(--bg); padding: 16px; border-radius: 16px; border: 1px solid var(--border); border-left: 4px solid var(--red); box-shadow:var(--shadow); margin-top: 30px;">
+                        <h4 style="margin-bottom: 10px; font-size:0.85rem; color:var(--primary); font-weight:700;">新規 Gem の作成</h4>
+                        <label style="display:block; color:var(--text-muted); font-size:0.7rem; margin-bottom:4px; font-weight:600;">Gemの名前</label>
+                        <input type="text" value="英語スピーキング相手" style="width:100%; background:var(--sidebar-bg); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; margin-bottom:12px; font-size:0.78rem; font-weight:500;" readonly>
+                        <label style="display:block; color:var(--text-muted); font-size:0.7rem; margin-bottom:4px; font-weight:600;">指示（プロンプト）</label>
+                        <textarea style="width:100%; height:60px; background:var(--sidebar-bg); border:1px solid var(--border); color:var(--text); padding:6px 10px; border-radius:8px; font-size:0.78rem; resize:none; font-family:inherit; line-height:1.45;" readonly>あなたは中学校の英語の先生です。簡単な英語で対話し、表現の誤りがあれば優しく教えてください。</textarea>
                     </div>
                 `;
                 triggerRestart(5000);
             }
             else if (step === 9) {
                 // Step 9: Workspace
+                currentModel.innerText = "3.5 Flash";
                 setTimeout(() => {
                     typeText(chatInput, "@Google ドライブ 来週の職員会議のレジュメ.pdf を要約して", 35, () => {
                         const chip = document.createElement('div');
                         chip.className = 'workspace-chip';
                         chip.innerHTML = '<span class="material-symbols-outlined" style="font-size:12px;">draft</span> レジュメ.pdf';
-                        const wrapper = document.getElementById('input-box-wrapper');
+                        const wrapper = document.getElementById('input-wrapper');
                         wrapper.insertBefore(chip, chatInput);
                         chatInput.value = "@Google ドライブ ... 要約して";
                         setTimeout(() => {
@@ -519,7 +929,7 @@
                             chatInput.value = '';
                             chip.remove();
                             setTimeout(() => {
-                                addBubble('ai', "ドライブ内の<b>『来週の職員会議のレジュメ.pdf』</b>を確認しました。要約：<br>1. 議題：期末テストの日程調整<br>2. 決定事項：進捗報告書の提出締め切りは今週末まで。");
+                                addBubble('ai', "ドライブ内の<b>『来週の職員会議のレジュメ.pdf』</b>を確認しました。要約：<br>1. <b>議題</b>：期末テストの日程調整および採点基準の確認<br>2. <b>決定事項</b>：進捗報告書の提出締め切りは今週末の17時まで。<br><br>詳細はドライブ内の本番ファイルをご参照ください。");
                                 triggerRestart(5500);
                             }, 1200);
                         }, 1000);
