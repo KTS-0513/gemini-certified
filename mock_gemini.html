@@ -44,11 +44,26 @@
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
             background: var(--bg);
             color: var(--text);
-            display: flex;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
             font-size: 0.82rem;
             transition: all 0.3s;
+            position: relative;
+        }
+        #mock-container {
+            width: 1024px;
+            height: 576px;
+            transform-origin: top left;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            overflow: hidden;
+            background: var(--bg);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Main Workspace (Takes full width, no sidebar for complete privacy) */
@@ -637,9 +652,10 @@
     </style>
 </head>
 <body>
+    <div id="mock-container">
 
-    <!-- Main Chat Workspace (Full Width, No Sidebar for absolute user privacy) -->
-    <div class="main-chat">
+        <!-- Main Chat Workspace (Full Width, No Sidebar for absolute user privacy) -->
+        <div class="main-chat">
         <div class="header-top">
             <span class="material-symbols-outlined pen-btn">edit</span>
         </div>
@@ -822,8 +838,36 @@
 
         <div class="toast" id="toast">Google ドキュメントにエクスポートしました</div>
     </div>
+    </div> <!-- End #mock-container -->
 
     <script>
+        // Dynamic Responsive Scaling Utility
+        function adjustScale() {
+            const container = document.getElementById('mock-container');
+            if (!container) return;
+            const targetWidth = 1024;
+            const targetHeight = 576;
+            
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+            
+            const scaleX = winWidth / targetWidth;
+            const scaleY = winHeight / targetHeight;
+            const scale = Math.min(scaleX, scaleY);
+            
+            container.style.transform = `scale(${scale})`;
+            
+            // Center the container
+            const left = (winWidth - targetWidth * scale) / 2;
+            const top = (winHeight - targetHeight * scale) / 2;
+            container.style.left = `${left}px`;
+            container.style.top = `${top}px`;
+        }
+
+        window.addEventListener('resize', adjustScale);
+        window.addEventListener('load', adjustScale);
+        adjustScale(); // Immediate execution
+
         const urlParams = new URLSearchParams(window.location.search);
         const step = parseInt(urlParams.get('step')) || 1;
         const chatArea = document.getElementById('chat-area');

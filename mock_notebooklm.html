@@ -62,12 +62,27 @@
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
             background: var(--bg);
             color: var(--text);
-            display: flex;
-            flex-direction: column;
             height: 100vh;
+            width: 100vw;
             overflow: hidden;
             font-size: 0.8rem;
             transition: all 0.3s;
+            position: relative;
+        }
+        #mock-container {
+            width: 1024px;
+            height: 576px;
+            transform-origin: top left;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Top Header (Screenshot Replica) */
@@ -721,9 +736,10 @@
     </style>
 </head>
 <body>
+    <div id="mock-container">
 
-    <!-- Top Header (Screenshot Replica) -->
-    <header class="top-header">
+        <!-- Top Header (Screenshot Replica) -->
+        <header class="top-header">
         <div class="header-left">
             <div class="notebook-icon-circle">N</div>
             <span class="notebook-title">Untitled notebook</span>
@@ -927,8 +943,36 @@
         </div>
 
     </div>
+    </div> <!-- End #mock-container -->
 
     <script>
+        // Dynamic Responsive Scaling Utility
+        function adjustScale() {
+            const container = document.getElementById('mock-container');
+            if (!container) return;
+            const targetWidth = 1024;
+            const targetHeight = 576;
+            
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+            
+            const scaleX = winWidth / targetWidth;
+            const scaleY = winHeight / targetHeight;
+            const scale = Math.min(scaleX, scaleY);
+            
+            container.style.transform = `scale(${scale})`;
+            
+            // Center the container
+            const left = (winWidth - targetWidth * scale) / 2;
+            const top = (winHeight - targetHeight * scale) / 2;
+            container.style.left = `${left}px`;
+            container.style.top = `${top}px`;
+        }
+
+        window.addEventListener('resize', adjustScale);
+        window.addEventListener('load', adjustScale);
+        adjustScale(); // Immediate execution
+
         const urlParams = new URLSearchParams(window.location.search);
         const step = parseInt(urlParams.get('step')) || 1;
         const sourceModal = document.getElementById('source-modal');
